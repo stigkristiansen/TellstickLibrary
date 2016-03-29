@@ -8,7 +8,7 @@
         "Tellstick Gateway"  
     ] ,   
     "parentRequirements" :  [ ] , 
-    "childRequirements" :  [{AC3168FC-CBCD-4DE9-825B-45BB542D04F4}] , 
-    "implemented" :  [{018EF6B5-AB94-40C6-AA53-46943E824ACF}] , 
+    "childRequirements" :  [] , 
+    "implemented" :  [] , 
     "prefix" :  "TS" 
 }
