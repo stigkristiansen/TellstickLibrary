@@ -2,7 +2,7 @@
     "id" :  "{655884D6-7969-4DAF-8992-637BEE9FD70D}" , 
     "name" :  "Tellstick Gateway" , 
     "type" :  2 , 
-    "vendor" :  "Telldus" , 
+    "vendor" :  "" , 
     "aliases" : 
     [ 
         "Tellstick Gateway"  
