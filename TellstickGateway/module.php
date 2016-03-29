@@ -1,3 +1,5 @@
+<?
+
 class TellstickGateway extends IPSModule
 {
 
@@ -20,3 +22,5 @@ class TellstickGateway extends IPSModule
 	}
 
 }
+
+?>
