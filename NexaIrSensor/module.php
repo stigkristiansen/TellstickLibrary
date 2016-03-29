@@ -1,3 +1,5 @@
+<?
+
 class NexaIrSensor extends IPSModule
 {
 
@@ -12,11 +14,12 @@ class NexaIrSensor extends IPSModule
     public function ApplyChanges()
     {
         parent::ApplyChanges();
-    
     }
 	
-	public function ReceiveData($JSONString)
+    public function ReceiveData($JSONString)
     {
-	}
+    }
 
 }
+
+?>
