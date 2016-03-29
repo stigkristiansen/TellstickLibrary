@@ -3,7 +3,6 @@
 class TellstickGateway extends IPSModule
 {
 
-    
     public function Create()
     {
         parent::Create();
@@ -14,12 +13,12 @@ class TellstickGateway extends IPSModule
     public function ApplyChanges()
     {
         parent::ApplyChanges();
-        $this->RequestAVRState();
+        
     }
 	
-	public function ReceiveData($JSONString)
+    public function ReceiveData($JSONString)
     {
-	}
+    }
 
 }
 
