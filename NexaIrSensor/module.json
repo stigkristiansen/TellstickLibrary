@@ -1,0 +1,14 @@
+{ 
+    "id" :  "{A72120D2-FEBD-4125-990A-73AA6586D973}" , 
+    "name" :  "Nexa IR sensor" , 
+    "type" :  3 , 
+    "vendor" :  "Telldus" , 
+    "aliases" : 
+    [ 
+        "Nexa IR Sensor"  
+    ] ,   
+    "parentRequirements" :  [ ] , 
+    "childRequirements" :  [] , 
+    "implemented" :  [{AC3168FC-CBCD-4DE9-825B-45BB542D04F4}] , 
+    "prefix" :  "" 
+}
