@@ -2,13 +2,13 @@
     "id" :  "{655884D6-7969-4DAF-8992-637BEE9FD70D}" , 
     "name" :  "Tellstick Gateway" , 
     "type" :  2 , 
-    "vendor" :  "" , 
+    "vendor" :  "Telldus" , 
     "aliases" : 
     [ 
         "Tellstick Gateway"  
     ] ,   
-    "parentRequirements" :  [ ] , 
-    "childRequirements" :  [] , 
-    "implemented" :  [] , 
-    "prefix" :  "TS" 
+    "parentRequirements" :  ["{79827379-F36E-4ADA-8A95-5F8D1DC92FA9}"] , 
+    "childRequirements" :  ["{F746048C-AAB6-479D-AC48-B4C08875E5CF}"] , 
+    "implemented" :  ["{018EF6B5-AB94-40C6-AA53-46943E824ACF}", "{14494CA1-CFD9-4189-A804-900BFB7A71AB}"] , 
+    "prefix" :  "TSN" 
 }
