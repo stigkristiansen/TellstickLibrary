@@ -24,8 +24,9 @@ class TellstickGateway extends IPSModule
     public function ReceiveData($JSONString) {
 				
         $incomingData = json_decode($JSONString);
+		$incomingBuffer = utf8_decode($incomingData->Buffer);
 		
-		IPS_LogMessage("Tellstick Library", utf8_decode($incomingData->Buffer));
+		IPS_LogMessage("Tellstick Library", $incomingBuffer);
 		
 		$bufferId = $this->GetIDForIdent("Buffer");
 	
@@ -35,7 +36,7 @@ class TellstickGateway extends IPSModule
         }
 
 		$data = GetValueString($bufferId);
-        $data .= utf8_decode($incomingData->Buffer);
+        $data .= $incomingBuffer;
 		
 		$foundMessage = false;
 		$arr = str_split($data);
