@@ -22,18 +22,74 @@ class TellstickGateway extends IPSModule
     }
 	
     public function ReceiveData($JSONString) {
- 
-        // Empfangene Daten vom I/O
+				
         $data = json_decode($JSONString);
-        IPS_LogMessage("ReceiveData", utf8_decode($data->Buffer));
- 
-        // Hier werden die Daten verarbeitet
- 
-        // Weiterleitung zu allen Gerät-/Device-Instanzen
-        $this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $data->Buffer)));
+		
+		IPS_LogMessage("Tellstick Library", utf8_decode($data->Buffer));
+		
+		$bufferId = $this->GetIDForIdent("Buffer");
+	
+        if (!$this->lock("ReceiveLock")) {
+            trigger_error("ReceiveBuffer is locked",E_USER_NOTICE);
+            return false;
+        }
+
+		$data = GetValueString($bufferId);
+        $data .= utf8_decode($data->Buffer);
+		
+		$foundMessage = false;
+		$arr = str_split($data);
+		$max = sizeof($arr);
+		for($i=0;$i<$max-1;$i++) {
+         if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
+				$message = substr($data, 2, $i-1);
+				$foundMessage = true;
+				
+				IPS_LogMessage("Tellstick Library", "Received message: ".$message);
+				
+				if($i!=$max-2){
+					$newData = substr($data, $i+2);
+					SetValueString($bufferId, $newData);
+				} else
+					SetValueString($bufferId, "");
+				   
+				break;
+			}
+		}
+		
+		if(!$foundMessage) {
+			SetValueString($bufferId, $data);
+		} 
+		
+		$this->unlock("ReceiveLock");
+		
+		if($foundMessage) {
+			$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+		}
+        
     }
 
 
+	private function lock($ident)
+    {
+        for ($i = 0; $i < 100; $i++)
+        {
+            if (IPS_SemaphoreEnter("TSG_" . (string) $this->InstanceID . (string) $ident, 1))
+            {
+                return true;
+            }
+            else
+            {
+                IPS_Sleep(mt_rand(1, 5));
+            }
+        }
+        return false;
+    }
+
+    private function unlock($ident)
+    {
+        IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
+    }
 }
 
 ?>
