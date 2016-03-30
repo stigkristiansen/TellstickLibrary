@@ -13,7 +13,12 @@ class TellstickGateway extends IPSModule
     public function ApplyChanges()
     {
         parent::ApplyChanges();
-        
+    
+		$this->RegisterVariableString("Buffer", "Buffer");	
+		$this->RegisterVariableString("LastCommand", "LastCommand");
+
+		IPS_SetHidden($this->GetIDForIdent('Buffer'), true);
+        IPS_SetHidden($this->GetIDForIdent('LastCommand'), true);    
     }
 	
     public function ReceiveData($JSONString) {
