@@ -60,6 +60,8 @@ class TellstickGateway extends IPSModule
 		
 		if(!$foundMessage) {
 			SetValueString($bufferId, $data);
+		} else {
+			SetValueString($this->GetIDForIdent("LastCommand"), $message);
 		} 
 		
 		$this->unlock("ReceiveLock");
