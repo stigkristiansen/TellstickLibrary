@@ -100,7 +100,7 @@ function DecodeOregonF824($data) {
 	$rollingcode = $checksum;
 	$channel = "0x".$arr[0];
 
-	IPS_LogMessage("Tellstick 2","Neg: ".$neg);
+	//IPS_LogMessage("Tellstick 2","Neg: ".$neg);
 
 	$checksum += $unknown + $hum1 + $hum2 + $neg + $temp1 + $temp2 + $temp3 + $battery + $channel + 0xF + 0x8 + 0x2 + 0x4;
 
