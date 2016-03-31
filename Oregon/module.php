@@ -38,25 +38,41 @@ class OregonWeatherStation extends IPSModule
 
         $protocol = GetParameter("protocol", $message);
 
-	if(stripos($protocol, "oregon")!==false) {
-		$decodedMessage = DecodeOregon($message);
-		IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
-	} else {
-		IPS_LogMessage("OregonSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
-		return;
-	}
+		if(stripos($protocol, "oregon")!==false) {
+			$decodedMessage = DecodeOregon($message);
+			IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
+		} else {
+			IPS_LogMessage("OregonSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+			return;
+		}
 	
-	if(strlen($decodedMessage)>0) {
+		if(strlen($decodedMessage)>0) {
+			$model = intval(GetParameter("model", $decodedMessage));
+			$id = intval(GetParameter("id", $decodedMessage));
+			
+			$myModelInt = $this->ReadPropertyInteger("model");
+			switch($myModelInt) {
+				case 0:
+					$myModel="F824";
+					break;
+				case 1:
+					$myModel="EA4C";
+					break;
+				default:
+					$myModel="";
+			}	
+			$myId = $this->ReadPropertyInteger("id");
+			
+			if($myModel==$model && $myId==$id) {
+				$temperature = GetParameter("temp", $decodedMessage);
+				$humidity = GetParameter("humidity", $decodedMessage);
 		
-		
-		$temperature = GetParameter("temp", $decodedMessage);
-		$humidity = GetParameter("humidity", $decodedMessage);
-	
-		SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
-		SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
-	} else {
-		IPS_LogMessage("OregonSensor", "Unsupported model");
-	}
+				SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
+				SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+			}	
+		} else {
+			IPS_LogMessage("OregonSensor", "Unsupported model");
+		}
  
     }
 
