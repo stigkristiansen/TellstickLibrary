@@ -1,0 +1,14 @@
+{ 
+    "id" :  "{9C17CB3A-7D10-4020-965D-F5A74FB9F257}" , 
+    "name" :  "Oregon Weather Station" , 
+    "type" :  3 , 
+    "vendor" :  "Telldus" , 
+    "aliases" : 
+    [ 
+        "Oregon Weather Station"  
+    ] ,   
+    "parentRequirements" :  ["{14494CA1-CFD9-4189-A804-900BFB7A71AB}"] , 
+    "childRequirements" :  [] , 
+    "implemented" :  ["{F746048C-AAB6-479D-AC48-B4C08875E5CF}"] , 
+    "prefix" :  "TSG" 
+}
