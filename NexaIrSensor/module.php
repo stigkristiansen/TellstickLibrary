@@ -48,7 +48,7 @@ class NexaIrSensor extends IPSModule
 		//3/31/2016 21:27:52 | NexaIRSensor | Decoded message: class:command;protocol:arctech;model:selflearning;house:11843482;unit:10;group:0;method:turnoff
 	
 		if(strlen($decodedMessage)>0) {
-			$unit = intval(GetParameter("unit|", $decodedMessage));
+			$unit = intval(GetParameter("unit", $decodedMessage));
 			$house = intval(GetParameter("house", $decodedMessage));
 			
 			IPS_LogMessage("NexaIRSensor", $house.":".$unit);
