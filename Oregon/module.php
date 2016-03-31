@@ -44,8 +44,8 @@ class OregonWeatherStation extends IPSModule
 	}
 	
 	if(strlen($decodedMessage)>0) {
-		$temperature = GetParameter("temp", $DecodedMessage);
-		$humidity = GetParameter("humidity", $DecodedMessage);
+		$temperature = GetParameter("temp", $decodedMessage);
+		$humidity = GetParameter("humidity", $decodedMessage);
 	
 		SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
 		SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
