@@ -1,5 +1,7 @@
 <?
 
+require_once(__DIR__ . "/../TellstickUtil.php");  
+
 class NexaIrSensor extends IPSModule
 {
 
@@ -25,6 +27,14 @@ class NexaIrSensor extends IPSModule
         	IPS_LogMessage("NexaIRSensor", "This is not for me!");
         	return;
         }
+        
+        $protocol = GetParameter("protocol", $Message);
+
+	if(stripos($protocol, "arctech")==false) {
+		return;
+	}
+	
+	$decodedMessage = DecodeNexa($Message);
  
     }
 
