@@ -1,3 +1,5 @@
+<?
+
 function GetParameter($Parameter, $Message) {
 	$arr = explode (";", $Message);
 	$max = sizeof($arr);
@@ -76,3 +78,50 @@ function DecodeOregon($Message) {
 
 }
 
+function DecodeOregonF824($data) {
+
+	//IPS_LogMessage("Tellstick 2","Decoding Oregon model F824 with data: ".$data);
+
+	$arr=str_split($data);
+
+	$crcCheck = $arr[13];
+	$messageChecksum1 = "0x".$arr[12];
+	$messageChecksum2 = "0x".$arr[11];
+	$unknown = "0x".$arr[10];
+	$hum1 = "0x".$arr[9];
+	$hum2 = "0x".$arr[8];
+	$neg = "0x".$arr[7];
+//	$neg = $arr[7];
+	$temp1 = "0x".$arr[6];
+	$temp2 = "0x".$arr[5];
+	$temp3 = "0x".$arr[4];
+	$battery = "0x".$arr[3]; //PROBABLY battery
+	$checksum = $arr[1] + $arr[2];
+	$rollingcode = $checksum;
+	$channel = "0x".$arr[0];
+
+	IPS_LogMessage("Tellstick 2","Neg: ".$neg);
+
+	$checksum += $unknown + $hum1 + $hum2 + $neg + $temp1 + $temp2 + $temp3 + $battery + $channel + 0xF + 0x8 + 0x2 + 0x4;
+
+	if ((($checksum >> 4) & 0xF) != $messageChecksum1 || ($checksum & 0xF) != $messageChecksum2){
+		//checksum error
+		return "";
+	}
+
+	$temperature = (($temp1 * 100) + ($temp2 * 10) + $temp3)/10.0;
+	if ($neg>0) {
+		$temperature *= -1;
+	}
+	$humidity = ($hum1 * 10.0) + $hum2;
+
+	$decoded = "class:sensor;protocol:oregon;model:F824;id:".$rollingcode.";temp:".$temperature.";humidity:".$humidity.";";
+
+//  	IPS_LogMessage("Tellstick 2", "Decoded Oregon message: ".$decoded);
+
+	return $decoded;
+
+}
+
+
+?>
