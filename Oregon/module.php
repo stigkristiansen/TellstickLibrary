@@ -43,7 +43,7 @@ class OregonWeatherStation extends IPSModule
 		return;
 	}
 	
-	if(len($decodedMessage)>0) {
+	if(strlen($decodedMessage)>0) {
 		$temperature = GetParameter("temp", $DecodedMessage);
 		$humidity = GetParameter("humidity", $DecodedMessage);
 	
