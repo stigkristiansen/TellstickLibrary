@@ -51,13 +51,16 @@ class NexaIrSensor extends IPSModule
 			$unit = intval(GetParameter("unit|", $decodedMessage));
 			$house = intval(GetParameter("house", $decodedMessage));
 			
+			IPS_LogMessage("NexaIRSensor", $house.":".$unit);
+						
 			$myUnit = $this->ReadPropertyInteger("unit");
 			$myHouse = $this->ReadPropertyInteger("house");
 			
+			IPS_LogMessage("NexaIRSensor", $myHouse.":".$myUnit);
+			
 			if($myUnit==$unit && $myHouse==$house) {
 				$method = GetParameter("method", $decodedMessage);
-				
-				
+								
 				SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
 				
 			}	
