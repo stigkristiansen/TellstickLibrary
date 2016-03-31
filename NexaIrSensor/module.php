@@ -10,12 +10,17 @@ class NexaIrSensor extends IPSModule
     {
         parent::Create();
         $this->ConnectParent("{655884D6-7969-4DAF-8992-637BEE9FD70D}");
+		
+		$this->RegisterPropertyInteger ("house", 0 );
+		$this->RegisterPropertyInteger ("unit", 0 );
 
     }
 
     public function ApplyChanges()
     {
         parent::ApplyChanges();
+		
+		$this->RegisterVariableBoolean( "Status", "Status", "", false);
     }
 	
     public function ReceiveData($JSONString) {
@@ -40,9 +45,25 @@ class NexaIrSensor extends IPSModule
 			return;
 		}
 		
-		
+		//3/31/2016 21:27:52 | NexaIRSensor | Decoded message: class:command;protocol:arctech;model:selflearning;house:11843482;unit:10;group:0;method:turnoff
 	
-	
+		if(strlen($decodedMessage)>0) {
+			$unit = intval(GetParameter("unit|", $decodedMessage));
+			$house = intval(GetParameter("house", $decodedMessage));
+			
+			$myUnit = $this->ReadPropertyInteger("unit");
+			$myHouse = $this->ReadPropertyInteger("house");
+			
+			if($myUnit==$unit && $myHouse==$house) {
+				$method = GetParameter("method", $decodedMessage);
+				
+				
+				SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
+				
+			}	
+		} else {
+			IPS_LogMessage("NexaIRSensor", "Unsupported model");
+		}
  
     }
 
