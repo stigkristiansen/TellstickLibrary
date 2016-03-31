@@ -1,7 +1,8 @@
 {
     "elements":
     [
-        { "type": "Select", "name": "SMSType", "caption": "Type",
+        { "type": "ValidationTextBox", "name": "id", "caption": "Id" },
+	{ "type": "Select", "name": "SMSType", "caption": "Type",
             "options": [
                 { "label": "SMS", "value": 0 },
                 { "label": "Kombi-SMS", "value": 1 },
