@@ -32,7 +32,7 @@ class OregonWeatherStation extends IPSModule
 
         $protocol = GetParameter("protocol", $message);
 
-	if(stripos($protocol, "oregon")==false) {
+	if(stripos($protocol, "oregon")!==true) {
 		IPS_LogMessage("OregonSensor", "This is not for me! (unsupportet protocol)");
 		return;
 	}
