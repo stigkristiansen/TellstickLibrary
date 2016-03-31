@@ -16,6 +16,9 @@ class OregonWeatherStation extends IPSModule
     public function ApplyChanges()
     {
         parent::ApplyChanges();
+        
+        this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
+        this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
     }
 	
     public function ReceiveData($JSONString) {
