@@ -17,8 +17,8 @@ class OregonWeatherStation extends IPSModule
     {
         parent::ApplyChanges();
         
-        this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
-        this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
+        $this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
+        $this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
     }
 	
     public function ReceiveData($JSONString) {
@@ -40,10 +40,16 @@ class OregonWeatherStation extends IPSModule
 		IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
 	} else {
 		IPS_LogMessage("OregonSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
-		
+		return;
 	}
 	
+	if(len($decodedMessage)>0) {
+		$temperature = GetParameter("temp", $DecodedMessage);
+		$humidity = GetParameter("humidity", $DecodedMessage);
 	
+		SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
+		SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+	}
  
     }
 
