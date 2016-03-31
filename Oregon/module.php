@@ -2,7 +2,7 @@
 
 require_once(__DIR__ . "/../TellstickUtil.php");  
 
-class OregonSensor extends IPSModule
+class Oregon extends IPSModule
 {
 
     
