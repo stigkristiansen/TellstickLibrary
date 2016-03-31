@@ -19,7 +19,12 @@ class NexaIrSensor extends IPSModule
     public function ReceiveData($JSONString) {
          // Empfangene Daten vom Gateway/Splitter
         $data = json_decode($JSONString);
-        IPS_LogMessage("ReceiveDataChild", utf8_decode($data->Buffer));
+        IPS_LogMessage("NexaIRSensor", "Received ".utf8_decode($data->Buffer));
+        
+        if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
+        	IPS_LogMessage("NexaIRSensor", "This is not for me!")
+        	return;
+        }
  
     }
 
