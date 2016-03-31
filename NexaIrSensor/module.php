@@ -19,22 +19,25 @@ class NexaIrSensor extends IPSModule
     }
 	
     public function ReceiveData($JSONString) {
-         // Empfangene Daten vom Gateway/Splitter
+         
         $data = json_decode($JSONString);
-        IPS_LogMessage("NexaIRSensor", "Received ".utf8_decode($data->Buffer));
+        $message = utf8_decode($data->Buffer);
+        
+        IPS_LogMessage("NexaIRSensor", "Received ".$message);
         
         if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
         	IPS_LogMessage("NexaIRSensor", "This is not for me!");
         	return;
         }
-        
-        $protocol = GetParameter("protocol", $Message);
+
+        $protocol = GetParameter("protocol", $message);
 
 	if(stripos($protocol, "arctech")==false) {
 		return;
 	}
 	
-	$decodedMessage = DecodeNexa($Message);
+	$decodedMessage = DecodeNexa($message);
+	IPS_LogMessage("NexaIRSensor", "Decoded message: ".$decodedMessage);
  
     }
 
