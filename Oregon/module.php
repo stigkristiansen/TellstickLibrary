@@ -32,13 +32,15 @@ class OregonWeatherStation extends IPSModule
 
         $protocol = GetParameter("protocol", $message);
 
-	if(stripos($protocol, "oregon")!==true) {
-		IPS_LogMessage("OregonSensor", "This is not for me! (unsupportet protocol: ".$protocol.")");
-		return;
+	if(stripos($protocol, "oregon")!==false) {
+		$decodedMessage = DecodeOregon($message);
+		IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
+	} else {
+		IPS_LogMessage("OregonSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+		
 	}
 	
-	$decodedMessage = DecodeOregon($message);
-	IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
+	
  
     }
 
