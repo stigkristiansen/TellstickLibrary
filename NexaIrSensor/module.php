@@ -26,13 +26,14 @@ class NexaIrSensor extends IPSModule
         IPS_LogMessage("NexaIRSensor", "Received ".$message);
         
         if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
-        	IPS_LogMessage("NexaIRSensor", "This is not for me!");
+        	IPS_LogMessage("NexaIRSensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
 
         $protocol = GetParameter("protocol", $message);
 
 	if(stripos($protocol, "arctech")==false) {
+		IPS_LogMessage("NexaIRSensor", "This is not for me! (unsupportet protocol)");
 		return;
 	}
 	
