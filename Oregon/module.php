@@ -49,6 +49,8 @@ class OregonWeatherStation extends IPSModule
 	
 		SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
 		SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+	} else {
+		IPS_LogMessage("OregonSensor", "Unsupported model");
 	}
  
     }
