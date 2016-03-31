@@ -2,11 +2,10 @@
     "elements":
     [
         { "type": "ValidationTextBox", "name": "id", "caption": "Id" },
-	{ "type": "Select", "name": "SMSType", "caption": "Type",
+	{ "type": "Select", "name": "type", "caption": "Type",
             "options": [
-                { "label": "SMS", "value": 0 },
-                { "label": "Kombi-SMS", "value": 1 },
-                { "label": "MMS", "value": 2 }
+                { "label": "F824", "value": 0 },
+                { "label": "EA4C", "value": 1 },
             ]
 	}
     ],
