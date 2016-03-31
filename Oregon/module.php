@@ -11,7 +11,7 @@ class OregonWeatherStation extends IPSModule
         parent::Create();
         $this->ConnectParent("{655884D6-7969-4DAF-8992-637BEE9FD70D}");
 		
-		$this->RegisterPropertyInteger ("type", 0 );
+		$this->RegisterPropertyInteger ("model", 0 );
 		$this->RegisterPropertyInteger ("id", 0 );
 
     }
@@ -47,6 +47,8 @@ class OregonWeatherStation extends IPSModule
 	}
 	
 	if(strlen($decodedMessage)>0) {
+		
+		
 		$temperature = GetParameter("temp", $decodedMessage);
 		$humidity = GetParameter("humidity", $decodedMessage);
 	

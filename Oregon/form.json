@@ -2,7 +2,7 @@
     "elements":
     [
         { "type": "ValidationTextBox", "name": "id", "caption": "Id" },
-	{ "type": "Select", "name": "type", "caption": "Type",
+	{ "type": "Select", "name": "model", "caption": "Model",
             "options": [
                 { "label": "F824", "value": 0 },
                 { "label": "EA4C", "value": 1 },
