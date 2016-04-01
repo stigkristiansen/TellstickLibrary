@@ -1,0 +1,14 @@
+{ 
+    "id" :  "{DA031185-3FAB-4EBA-8A17-2D85EFCAAB65}" , 
+    "name" :  "NexaSensor" , 
+    "type" :  3 , 
+    "vendor" :  "Telldus" , 
+    "aliases" : 
+    [ 
+        "Nexa Sensor"  
+    ] ,   
+    "parentRequirements" :  ["{14494CA1-CFD9-4189-A804-900BFB7A71AB}"] , 
+    "childRequirements" :  [] , 
+    "implemented" :  ["{F746048C-AAB6-479D-AC48-B4C08875E5CF}"] , 
+    "prefix" :  "TSGN" 
+}
