@@ -26,7 +26,7 @@ class OregonWeatherStation extends IPSModule
 	
     public function ReceiveData($JSONString) {
     	
-    	
+		return;
          
         $data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
@@ -37,8 +37,6 @@ class OregonWeatherStation extends IPSModule
         	IPS_LogMessage("OregonSensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
-
-	return;
 
         $protocol = GetParameter("protocol", $message);
 

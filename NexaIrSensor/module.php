@@ -24,7 +24,9 @@ class NexaIrSensor extends IPSModule
     }
 	
     public function ReceiveData($JSONString) {
-    	
+    
+		return;
+	
     	$data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
         
@@ -35,10 +37,6 @@ class NexaIrSensor extends IPSModule
         	return;
         }
         
-        
-
-	return;
-
         $protocol = GetParameter("protocol", $message);
 
 		if(stripos($protocol, "arctech")!==false) {
