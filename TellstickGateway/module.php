@@ -64,11 +64,13 @@ class TellstickGateway extends IPSModule
 			SetValueString($this->GetIDForIdent("LastCommand"), $message);
 		} 
 		
-		$this->unlock("ReceiveLock");
+		
 		
 		if($foundMessage) {
-			//$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+			$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 		}
+
+		$this->unlock("ReceiveLock");
         
     }
 
