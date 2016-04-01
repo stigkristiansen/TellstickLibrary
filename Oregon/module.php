@@ -26,7 +26,7 @@ class OregonWeatherStation extends IPSModule
 	
     public function ReceiveData($JSONString) {
     	
-    	return;
+    	
          
         $data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
