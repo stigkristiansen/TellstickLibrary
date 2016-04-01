@@ -61,7 +61,7 @@ class NexaSensor extends IPSModule
 			$method = GetParameter("method", $decodedMessage);
 			SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
 		} else {
-			IPS_LogMessage("Nexa Sensor", "Unsupported model");
+			IPS_LogMessage("Nexa Sensor", "This is not me!");
 		}
 	}
  
