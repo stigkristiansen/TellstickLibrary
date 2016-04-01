@@ -26,7 +26,7 @@ class TellstickGateway extends IPSModule
         $incomingData = json_decode($JSONString);
 		$incomingBuffer = utf8_decode($incomingData->Buffer);
 		
-		//IPS_LogMessage("Tellstick Library", $incomingBuffer);
+		IPS_LogMessage("Tellstick Library", $incomingBuffer);
 		
 		$bufferId = $this->GetIDForIdent("Buffer");
 	
@@ -46,7 +46,7 @@ class TellstickGateway extends IPSModule
 				$message = substr($data, 2, $i-1);
 				$foundMessage = true;
 				
-				//IPS_LogMessage("Tellstick Library", "Received message: ".$message);
+				IPS_LogMessage("Tellstick Library", "Received message: ".$message);
 				
 				if($i!=$max-2){
 					$newData = substr($data, $i+2);
@@ -67,7 +67,7 @@ class TellstickGateway extends IPSModule
 		$this->unlock("ReceiveLock");
 		
 		if($foundMessage) {
-			$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+			//$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 		}
         
     }
