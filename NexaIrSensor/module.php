@@ -36,6 +36,8 @@ class NexaIrSensor extends IPSModule
         	IPS_LogMessage("NexaIRSensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
+        
+        return;
 
         $protocol = GetParameter("protocol", $message);
 
