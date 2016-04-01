@@ -38,6 +38,8 @@ class OregonWeatherStation extends IPSModule
         	return;
         }
 
+	return;
+
         $protocol = GetParameter("protocol", $message);
 
 		if(stripos($protocol, "oregon")!==false) {
