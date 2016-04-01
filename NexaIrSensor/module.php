@@ -25,14 +25,12 @@ class NexaIrSensor extends IPSModule
 	
     public function ReceiveData($JSONString) {
     
-		return;
-	
-    	$data = json_decode($JSONString);
+		$data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
         
         IPS_LogMessage("NexaIRSensor", "Received ".$message);
         
-        if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
+        /*if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
         	IPS_LogMessage("NexaIRSensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
@@ -71,7 +69,7 @@ class NexaIrSensor extends IPSModule
 		} else {
 			IPS_LogMessage("NexaIRSensor", "Unsupported model");
 		}
- 
+ */
     }
 
 }
