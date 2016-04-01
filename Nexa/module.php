@@ -6,8 +6,7 @@ class NexaSensor extends IPSModule
 {
 
     
-    public function Create()
-    {
+    public function Create() {
         parent::Create();
         $this->ConnectParent("{655884D6-7969-4DAF-8992-637BEE9FD70D}");
 		
@@ -16,8 +15,7 @@ class NexaSensor extends IPSModule
 
     }
 
-    public function ApplyChanges()
-    {
+    public function ApplyChanges() {
         parent::ApplyChanges();
         
         $this->RegisterVariableBoolean( "Status", "Status", "", false );
@@ -35,6 +33,16 @@ class NexaSensor extends IPSModule
         	IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
+
+	$protocol = GetParameter("protocol", $message);
+
+	if(stripos($protocol, "arctech")!==false) {
+		$decodedMessage = DecodeNexa($message);
+		IPS_LogMessage("Nexa Sensor", "Decoded message: ".$decodedMessage);
+	} else {
+		IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+		return;
+	}
 
  
     }
