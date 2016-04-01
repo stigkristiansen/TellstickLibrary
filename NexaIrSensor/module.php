@@ -2,8 +2,7 @@
 
 require_once(__DIR__ . "/../TellstickUtil.php");  
 
-class NexaIrSensor extends IPSModule
-{
+class NexaIrSensor extends IPSModule {
 
     
     public function Create() {
@@ -23,7 +22,11 @@ class NexaIrSensor extends IPSModule
     }
 	
     public function ReceiveData($JSONString) {
-    
+    	$data = json_decode($JSONString);
+        $message = utf8_decode($data->Buffer);
+        
+        IPS_LogMessage("NexaIRSensor", "Received ".$message);
+
 	}
 }
 
