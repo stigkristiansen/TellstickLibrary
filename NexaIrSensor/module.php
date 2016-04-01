@@ -25,9 +25,7 @@ class NexaIrSensor extends IPSModule
 	
     public function ReceiveData($JSONString) {
     	
-    	return;
-         
-        $data = json_decode($JSONString);
+    	$data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
         
         IPS_LogMessage("NexaIRSensor", "Received ".$message);
