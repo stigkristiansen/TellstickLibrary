@@ -44,6 +44,26 @@ class NexaSensor extends IPSModule
 		return;
 	}
 
+	if(strlen($decodedMessage)>0) {
+		$unit = intval(GetParameter("unit", $decodedMessage));
+		$house = intval(GetParameter("house", $decodedMessage));
+			
+		IPS_LogMessage("Nexa Sensor", "Received command from: ".$house.":".$unit);
+						
+		$myUnit = $this->ReadPropertyInteger("unit");
+		$myHouse = $this->ReadPropertyInteger("house");
+			
+		IPS_LogMessage("Nexa Sensor", "I am:".$myHouse.":".$myUnit);
+			
+		if($myUnit==$unit && $myHouse==$house) {
+			IPS_LogMessage("Nexa Sensor", "It is a match, updating status...");
+
+			$method = GetParameter("method", $decodedMessage);
+			SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
+		} else {
+			IPS_LogMessage("Nexa Sensor", "Unsupported model");
+		}
+	}
  
     }
 
