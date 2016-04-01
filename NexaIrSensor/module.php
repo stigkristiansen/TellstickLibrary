@@ -35,7 +35,7 @@ class NexaIrSensor extends IPSModule
         	return;
         }
         
-        return;
+        
 
         $protocol = GetParameter("protocol", $message);
 
@@ -46,6 +46,8 @@ class NexaIrSensor extends IPSModule
 			IPS_LogMessage("NexaIRSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
+		
+		return;
 		
 		//3/31/2016 21:27:52 | NexaIRSensor | Decoded message: class:command;protocol:arctech;model:selflearning;house:11843482;unit:10;group:0;method:turnoff
 	
