@@ -1,4 +1,4 @@
-<?
+﻿<?
 
 require_once(__DIR__ . "/../TellstickUtil.php");  
 
@@ -36,6 +36,8 @@ class NexaIrSensor extends IPSModule
         }
         
         
+
+	return;
 
         $protocol = GetParameter("protocol", $message);
 
