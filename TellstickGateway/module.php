@@ -39,42 +39,35 @@ class TellstickGateway extends IPSModule
 		$data = GetValueString($bufferId);
         $data .= $incomingBuffer;
 		
-		$foundMessage = false;
-		$arr = str_split($data);
-		$max = sizeof($arr);
-		for($i=0;$i<$max-1;$i++) {
-         if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
-				$message = substr($data, 2, $i-1);
-				$foundMessage = true;
-				
-				IPS_LogMessage("Tellstick Library", "Received message: ".$message);
-				
-				if($i!=$max-2){
-					$newData = substr($data, $i+2);
-					SetValueString($bufferId, $newData);
-				} else
-					SetValueString($bufferId, "");
-				   
-				break;
+		do {
+			$foundMessage = false;
+			
+			$arr = str_split($data);
+			$max = sizeof($arr);
+			for($i=0;$i<$max-1;$i++) {
+				if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
+					$message = substr($data, 2, $i-1);
+					IPS_LogMessage("Tellstick Library", "Received message: ".$message);
+					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
+					
+					$foundMessage = true;
+										
+					if($i!=$max-2)
+						$data = substr($data, $i+2);
+					else
+						$data = "";
+					   
+					break;
+				}
 			}
-		}
+		} while ($foundMessage && strlen($data)>0);
 		
-		if(!$foundMessage) {
-			SetValueString($bufferId, $data);
-		} else {
-			SetValueString($this->GetIDForIdent("LastCommand"), $message);
-		} 
-		
-		
-		
-		if($foundMessage) {
-			$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
-		}
+		SetValueString($bufferId, $data);
 
 		$this->unlock("ReceiveLock");
         
     }
-
 
 	private function lock($ident)
     {
