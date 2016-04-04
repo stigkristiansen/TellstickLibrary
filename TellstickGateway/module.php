@@ -79,7 +79,7 @@ class TellstickGateway extends IPSModule
     {
         for ($i = 0; $i < 100; $i++)
         {
-            if (IPS_SemaphoreEnter("TSG_" . (string) $this->InstanceID . (string) $ident, 1))
+            if (IPS_SemaphoreEnter("TSG_" . (string) $ident, 1))
             {
                 return true;
             }
@@ -94,7 +94,7 @@ class TellstickGateway extends IPSModule
 
     private function unlock($ident)
     {
-        IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
+        IPS_SemaphoreLeave("TSG_" . (string) $ident);
     }
 }
 
