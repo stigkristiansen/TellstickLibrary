@@ -26,14 +26,15 @@ class TellstickGateway extends IPSModule
         $incomingData = json_decode($JSONString);
 		$incomingBuffer = utf8_decode($incomingData->Buffer);
 		
-		IPS_LogMessage("Tellstick Library", $incomingBuffer);
+		IPS_LogMessage("Tellstick Library", "Incoming from serial: ".$incomingBuffer);
 		
 		$bufferId = $this->GetIDForIdent("Buffer");
 	
         if (!$this->lock("ReceiveLock")) {
             trigger_error("ReceiveBuffer is locked",E_USER_NOTICE);
             return false;
-        }
+        } else
+			IPS_LogMessage("Tellstick Library","Buffer is locked");
 
 		$data = GetValueString($bufferId);
         $data .= $incomingBuffer;
@@ -79,7 +80,7 @@ class TellstickGateway extends IPSModule
     {
         for ($i = 0; $i < 100; $i++)
         {
-            if (IPS_SemaphoreEnter("TSG_" . (string) $ident, 1))
+            if (IPS_SemaphoreEnter("TSG_" . (string) $this->InstanceID . (string) $ident, 1))
             {
                 return true;
             }
@@ -94,7 +95,8 @@ class TellstickGateway extends IPSModule
 
     private function unlock($ident)
     {
-        IPS_SemaphoreLeave("TSG_" . (string) $ident);
+        IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
+		IPS_LogMessage("Tellstick Library","Buffer is unlocked");
     }
 }
 
