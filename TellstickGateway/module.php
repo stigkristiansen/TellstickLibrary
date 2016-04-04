@@ -26,15 +26,15 @@ class TellstickGateway extends IPSModule
         $incomingData = json_decode($JSONString);
 		$incomingBuffer = utf8_decode($incomingData->Buffer);
 		
-		IPS_LogMessage("Tellstick Library", "Incoming from serial: ".$incomingBuffer);
+		IPS_LogMessage("Tellstick Gateway", "Incoming from serial: ".$incomingBuffer);
 		
 		$bufferId = $this->GetIDForIdent("Buffer");
 	
-        if (!$this->lock("ReceiveLock")) {
-            trigger_error("ReceiveBuffer is locked",E_USER_NOTICE);
+        if (!$this->Lock("ReceiveLock")) {
+            IPS_LogMessage("Tellstick Gateway","Buffer is already locked");
             return false;
         } else
-			IPS_LogMessage("Tellstick Library","Buffer is locked");
+			IPS_LogMessage("Tellstick Gateway","Buffer is locked");
 
 		$data = GetValueString($bufferId);
 		$data = substr($data, strpos($data, "+W"));
@@ -42,13 +42,12 @@ class TellstickGateway extends IPSModule
 		
 		do {
 			$foundMessage = false;
-			
 			$arr = str_split($data);
 			$max = sizeof($arr);
 			for($i=0;$i<$max-1;$i++) {
 				if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
 					$message = substr($data, 2, $i-1);
-					IPS_LogMessage("Tellstick Library", "Received message: ".$message);
+					IPS_LogMessage("Tellstick Gateway", "Found message: ".$message);
 					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 					
@@ -66,11 +65,12 @@ class TellstickGateway extends IPSModule
 		
 		SetValueString($bufferId, $data);
 
-		$this->unlock("ReceiveLock");
+		$this->Unlock("ReceiveLock");
         
+		return true;
     }
 
-	private function lock($ident)
+	private function Lock($ident)
     {
         for ($i = 0; $i < 100; $i++)
         {
@@ -80,17 +80,17 @@ class TellstickGateway extends IPSModule
             }
             else
             {
-                IPS_LogMessage("Tellstick Library","Waiting for lock");
+                IPS_LogMessage("Tellstick Gateway","Waiting for lock");
 				IPS_Sleep(mt_rand(1, 5));
             }
         }
         return false;
     }
 
-    private function unlock($ident)
+    private function Unlock($ident)
     {
         IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
-		IPS_LogMessage("Tellstick Library","Buffer is unlocked");
+		IPS_LogMessage("Tellstick Gateway","Buffer is unlocked");
     }
 }
 
