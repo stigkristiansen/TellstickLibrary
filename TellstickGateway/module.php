@@ -37,6 +37,7 @@ class TellstickGateway extends IPSModule
 			IPS_LogMessage("Tellstick Library","Buffer is locked");
 
 		$data = GetValueString($bufferId);
+		$data = substr($data, strpos($data, "+W"));
         $data .= $incomingBuffer;
 		
 		do {
