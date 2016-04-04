@@ -85,7 +85,8 @@ class TellstickGateway extends IPSModule
             }
             else
             {
-                IPS_Sleep(mt_rand(1, 5));
+                IPS_LogMessage("Tellstick Library","Waiting for lock");
+				IPS_Sleep(mt_rand(1, 5));
             }
         }
         return false;
