@@ -12,7 +12,7 @@ class NexaSensor extends IPSModule
 		
 		$this->RegisterPropertyInteger ("house", 0 );
 		$this->RegisterPropertyInteger ("unit", 0 );
-		$this->RegisterPropertyInteger ("interval", 2 );
+		$this->RegisterPropertyInteger ("timeout", 2 );
 
     }
 
@@ -26,57 +26,58 @@ class NexaSensor extends IPSModule
 	
     public function ReceiveData($JSONString) {
 		
-		$interval = $this->ReadPropertyInteger("interval");
-    	$now = time();
-		
-		$lastId = $this->GetIDForIdent("Last");
-		$lastProcessed = GetValueInteger($lastId);
-		
-		if($lastProcessed+$interval<$now) {
 						
-			$data = json_decode($JSONString);
-			$message = utf8_decode($data->Buffer);
-			
-			IPS_LogMessage("Nexa Sensor", "Received ".$message);
-			
-			if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
-				IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported GUID in DataID)");
-				return;
-			}
+		$data = json_decode($JSONString);
+		$message = utf8_decode($data->Buffer);
+		
+		IPS_LogMessage("Nexa Sensor", "Received ".$message);
+		
+		if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
+			IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported GUID in DataID)");
+			return;
+		}
 
-			$protocol = GetParameter("protocol", $message);
+		$protocol = GetParameter("protocol", $message);
 
-			if(stripos($protocol, "arctech")!==false) {
-				$decodedMessage = DecodeNexa($message);
-				IPS_LogMessage("Nexa Sensor", "Decoded message: ".$decodedMessage);
-			} else {
-				IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported protocol: ".$protocol.")");
-				return;
-			}
+		if(stripos($protocol, "arctech")!==false) {
+			$decodedMessage = DecodeNexa($message);
+			IPS_LogMessage("Nexa Sensor", "Decoded message: ".$decodedMessage);
+		} else {
+			IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+			return;
+		}
 
-			if(strlen($decodedMessage)>0) {
-				$unit = intval(GetParameter("unit", $decodedMessage));
-				$house = intval(GetParameter("house", $decodedMessage));
-					
-				IPS_LogMessage("Nexa Sensor", "Received command from: ".$house.":".$unit);
-								
-				$myUnit = $this->ReadPropertyInteger("unit");
-				$myHouse = $this->ReadPropertyInteger("house");
-					
-				IPS_LogMessage("Nexa Sensor", "I am:".$myHouse.":".$myUnit);
-					
-				if($myUnit==$unit && $myHouse==$house) {
+		if(strlen($decodedMessage)>0) {
+			$unit = intval(GetParameter("unit", $decodedMessage));
+			$house = intval(GetParameter("house", $decodedMessage));
+				
+			IPS_LogMessage("Nexa Sensor", "Received command from: ".$house.":".$unit);
+							
+			$myUnit = $this->ReadPropertyInteger("unit");
+			$myHouse = $this->ReadPropertyInteger("house");
+				
+			IPS_LogMessage("Nexa Sensor", "I am:".$myHouse.":".$myUnit);
+				
+			if($myUnit==$unit && $myHouse==$house) {
+				$interval = $this->ReadPropertyInteger("timeout");
+				$now = time();
+		
+				$lastId = $this->GetIDForIdent("Last");
+				$lastProcessed = GetValueInteger($lastId);
+
+				if($lastProcessed+$interval<$now) {
 					IPS_LogMessage("Nexa Sensor", "It is a match, updating status...");
 
 					$method = GetParameter("method", $decodedMessage);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
 					
 					SetValueInteger($lastId, $now);
-				} else {
-					IPS_LogMessage("Nexa Sensor", "This is not me!");
 				}
+			} else {
+				IPS_LogMessage("Nexa Sensor", "This is not me!");
 			}
 		}
+		
     }
 
 }
