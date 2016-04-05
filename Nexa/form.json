@@ -2,7 +2,8 @@
     "elements":
     [
         { "type": "ValidationTextBox", "name": "house", "caption": "House" },
-	{ "type": "ValidationTextBox", "name": "unit", "caption": "Unit" }	
+	{ "type": "ValidationTextBox", "name": "unit", "caption": "Unit" },
+	{ "type": "IntervalBox", "name": "timeout", "caption": "Seconds" }	
     ],
 
 }
