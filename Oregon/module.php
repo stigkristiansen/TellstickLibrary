@@ -13,7 +13,7 @@ class OregonWeatherStation extends IPSModule
 		
 		$this->RegisterPropertyInteger ("model", 0 );
 		$this->RegisterPropertyInteger ("id", 0 );
-
+		$this->RegisterPropertyInteger ("timeout", 2 );
     }
 
     public function ApplyChanges()
@@ -22,6 +22,8 @@ class OregonWeatherStation extends IPSModule
         
         $this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
         $this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
+		$this->RegisterVariableInteger( "Last", "Last", "", 2 );
+		IPS_SetHidden($this->GetIDForIdent('Last'), true);
     }
 	
     public function ReceiveData($JSONString) {
