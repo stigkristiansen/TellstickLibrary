@@ -64,11 +64,22 @@ class OregonWeatherStation extends IPSModule
 			$myId = $this->ReadPropertyInteger("id");
 			
 			if($myModel==$model && $myId==$id) {
-				$temperature = GetParameter("temp", $decodedMessage);
-				$humidity = GetParameter("humidity", $decodedMessage);
+				$interval = $this->ReadPropertyInteger("timeout");
+				$now = time();
 		
-				SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
-				SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+				$lastId = $this->GetIDForIdent("Last");
+				$lastProcessed = GetValueInteger($lastId);
+
+				if($lastProcessed+$interval<$now) {
+
+					$temperature = GetParameter("temp", $decodedMessage);
+					$humidity = GetParameter("humidity", $decodedMessage);
+			
+					SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
+					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+					
+					SetValueInteger($lastId, $now);
+				}
 			}	
 		} else {
 			IPS_LogMessage("OregonSensor", "Unsupported model");
