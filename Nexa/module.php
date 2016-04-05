@@ -33,8 +33,7 @@ class NexaSensor extends IPSModule
 		$lastProcessed = GetValueInteger($lastId);
 		
 		if($lastProcessed+$interval<$now) {
-			SetValueInteger($lastId, $now);
-			
+						
 			$data = json_decode($JSONString);
 			$message = utf8_decode($data->Buffer);
 			
@@ -71,6 +70,8 @@ class NexaSensor extends IPSModule
 
 					$method = GetParameter("method", $decodedMessage);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
+					
+					SetValueInteger($lastId, $now);
 				} else {
 					IPS_LogMessage("Nexa Sensor", "This is not me!");
 				}
