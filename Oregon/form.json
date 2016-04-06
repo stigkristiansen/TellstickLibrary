@@ -8,7 +8,8 @@
                 { "label": "EA4C", "value": 1 },
             ]
 	},
-	{ "type": "IntervalBox", "name": "timeout", "caption": "Seconds" }
+	{ "type": "IntervalBox", "name": "timeout", "caption": "seconds" },
+	{ "type": "Label", "label": "Minimun time between commands before they get accepted." }
     ],
 
 }
