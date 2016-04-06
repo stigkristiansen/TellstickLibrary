@@ -49,7 +49,8 @@ class OregonWeatherStation extends IPSModule
 		}
 	
 		if(strlen($decodedMessage)>0) {
-			$model = intval(GetParameter("model", $decodedMessage));
+			$model = GetParameter("model", $decodedMessage);
+			
 			$id = intval(GetParameter("id", $decodedMessage));
 			
 			IPS_LogMessage("Oregon Sensor", "Received command from: ".$model.":".$id);
@@ -57,10 +58,10 @@ class OregonWeatherStation extends IPSModule
 			$myModelInt = $this->ReadPropertyInteger("model");
 			switch($myModelInt) {
 				case 0:
-					$myModel="F824";
+					$myModel="0xF824";
 					break;
 				case 1:
-					$myModel="EA4C";
+					$myModel="0xEA4C";
 					break;
 				default:
 					$myModel="";
