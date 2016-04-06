@@ -1,32 +1,27 @@
+<?
+
 class Logging {
-  
   private $logEnabled;
   private $sender;
-  
-  function __construct() { 
-    this->logEnabled = false;
-    this->sender = "":
-  } 
-    
-  function __construct1($EnableLogging) { 
-    this->logEnabled = $EnableLogging;
-  } 
-    
+
+  function __construct($EnableLogging, $Sender) {
+    $this->logEnabled = $EnableLogging;
+    $this->sender = $Sender;
+  }
+
   public function EnableLogging() {
-    this->logEnabled = true;
+    $this->logEnabled = true;
   }
-  
+
   public function DisableLogging() {
-    this->logEnabled = false;
+    $this->logEnabled = false;
   }
-  
-  public function LogMessage($Sender, $Message) {
-    if($logEnabled)
-      IPS_LogMessage($Sender, $Message);
-  }
-  
-  public functio LogMessage($Message) {
-    IPS_LogMessage(this->Sender, $Message);
+
+  public function LogMessage($Message) {
+    if($this->logEnabled) {
+      IPS_LogMessage($this->sender, $Message);
+	 }
   }
 
 }
+?>
