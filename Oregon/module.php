@@ -86,7 +86,7 @@ class OregonWeatherStation extends IPSModule
 					SetValueInteger($lastId, $now);
 				}
 			}  else 
-				IPS_LogMessage(Oregon Sensor", "This is not me!"); 
+				IPS_LogMessage("Oregon Sensor", "This is not me!"); 
 	
 		} else {
 			IPS_LogMessage("Oregon Sensor", "Unsupported model");
