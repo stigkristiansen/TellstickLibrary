@@ -31,7 +31,7 @@ class OregonWeatherStation extends IPSModule
 		$data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
         
-        IPS_LogMessage("OregonSensor", "Received ".$message);
+        IPS_LogMessage("Oregon Sensor", "Received ".$message);
         
         if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
         	IPS_LogMessage("OregonSensor", "This is not for me! (unsupported GUID in DataID)");
@@ -42,15 +42,17 @@ class OregonWeatherStation extends IPSModule
 
 		if(stripos($protocol, "oregon")!==false) {
 			$decodedMessage = DecodeOregon($message);
-			IPS_LogMessage("OregonSensor", "Decoded message: ".$decodedMessage);
+			IPS_LogMessage("Oregon Sensor", "Decoded message: ".$decodedMessage);
 		} else {
-			IPS_LogMessage("OregonSensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+			IPS_LogMessage("Oregon Sensor", "This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
 	
 		if(strlen($decodedMessage)>0) {
 			$model = intval(GetParameter("model", $decodedMessage));
 			$id = intval(GetParameter("id", $decodedMessage));
+			
+			IPS_LogMessage("Oregon Sensor", "Received command from: ".$model.":".$id);
 			
 			$myModelInt = $this->ReadPropertyInteger("model");
 			switch($myModelInt) {
@@ -63,6 +65,7 @@ class OregonWeatherStation extends IPSModule
 				default:
 					$myModel="";
 			}	
+			
 			$myId = $this->ReadPropertyInteger("id");
 			
 			if($myModel==$model && $myId==$id) {
@@ -82,9 +85,11 @@ class OregonWeatherStation extends IPSModule
 					
 					SetValueInteger($lastId, $now);
 				}
-			}	
+			}  else 
+				IPS_LogMessage(Oregon Sensor", "This is not me!"); 
+	
 		} else {
-			IPS_LogMessage("OregonSensor", "Unsupported model");
+			IPS_LogMessage("Oregon Sensor", "Unsupported model");
 		}
  
     }
