@@ -34,7 +34,8 @@ class OregonWeatherStation extends IPSModule
         $message = utf8_decode($data->Buffer);
         
         $instance = IPS_GetInstance($this->InstanceID);
-        $log = new Logging($this->ReadPropertyBoolean("log"), $instance['ModuleInfo']['ModuleName']);
+        $log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+        //$instance['ModuleInfo']['ModuleName']);
         
         $log->LogMessage("Received ".$message);
         
