@@ -68,7 +68,7 @@ class OregonWeatherStation extends IPSModule
 			}	
 			
 			$myId = $this->ReadPropertyInteger("id");
-			IPS_LogMessage("Oregon Sensor", "The model is: ".$model);
+			
 			if($myModel==$model && $myId==$id) {
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
