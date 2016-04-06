@@ -1,12 +1,17 @@
 <?
 
+require_once(__DIR__ . "/../Logging.php");
+
 class TellstickGateway extends IPSModule
 {
-
+    
+    
     public function Create()
     {
         parent::Create();
         $this->RequireParent("{6DC3D946-0D31-450F-A8C6-C42DB8D7D4F1}");
+        
+        $this->RegisterPropertyBoolean ("log", false );
 		
     }
 
@@ -26,15 +31,16 @@ class TellstickGateway extends IPSModule
         $incomingData = json_decode($JSONString);
 		$incomingBuffer = utf8_decode($incomingData->Buffer);
 		
-		IPS_LogMessage("Tellstick Gateway", "Incoming from serial: ".$incomingBuffer);
+		log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		$log->LogMessage("Incoming from serial: ".$incomingBuffer);
 		
 		$bufferId = $this->GetIDForIdent("Buffer");
 	
         if (!$this->Lock("ReceiveLock")) {
-            IPS_LogMessage("Tellstick Gateway","Buffer is already locked");
+            $log->LogMessage("Buffer is already locked");
             return false;
         } else
-			IPS_LogMessage("Tellstick Gateway","Buffer is locked");
+			$log->LogMessage("Buffer is locked");
 
 		$data = GetValueString($bufferId);
 		$data = substr($data, strpos($data, "+W"));
@@ -47,7 +53,7 @@ class TellstickGateway extends IPSModule
 			for($i=0;$i<$max-1;$i++) {
 				if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
 					$message = substr($data, 2, $i-1);
-					IPS_LogMessage("Tellstick Gateway", "Found message: ".$message);
+					$log->LogMessage("Found message: ".$message);
 					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 					
@@ -80,7 +86,8 @@ class TellstickGateway extends IPSModule
             }
             else
             {
-                IPS_LogMessage("Tellstick Gateway","Waiting for lock");
+                log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		$log->LogMessage("Waiting for lock");
 				IPS_Sleep(mt_rand(1, 5));
             }
         }
@@ -90,7 +97,8 @@ class TellstickGateway extends IPSModule
     private function Unlock($ident)
     {
         IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
-		IPS_LogMessage("Tellstick Gateway","Buffer is unlocked");
+		log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		$log->LogMessage("Buffer is unlocked");
     }
 }
 
