@@ -9,7 +9,8 @@
             ]
 	},
 	{ "type": "IntervalBox", "name": "timeout", "caption": "seconds" },
-	{ "type": "Label", "label": "Minimun time between commands before they get accepted." }
+	{ "type": "Label", "label": "Minimun time between commands before they get accepted." },
+	{ "type": "CheckBox", "name": "log", "caption": "Enable logging" }
     ],
 
 }
