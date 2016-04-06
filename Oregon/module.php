@@ -1,6 +1,7 @@
 <?
 
 require_once(__DIR__ . "/../TellstickUtil.php");  
+require_once(__DIR__ . "/../Logging.php");
 
 class OregonWeatherStation extends IPSModule
 {
@@ -32,7 +33,9 @@ class OregonWeatherStation extends IPSModule
 		$data = json_decode($JSONString);
         $message = utf8_decode($data->Buffer);
         
-        IPS_LogMessage("Oregon Sensor", "Received ".$message);
+        $log = new Logging(true, "Oregon Sensor");
+        
+        $log->LogMessage("Received ".$message);
         
         if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
         	IPS_LogMessage("Oregon Sensor", "This is not for me! (unsupported GUID in DataID)");
