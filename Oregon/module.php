@@ -14,6 +14,7 @@ class OregonWeatherStation extends IPSModule
 		$this->RegisterPropertyInteger ("model", 0 );
 		$this->RegisterPropertyInteger ("id", 0 );
 		$this->RegisterPropertyInteger ("timeout", 2 );
+		$this->RegisterPropertyBoolean ("log", false );
     }
 
     public function ApplyChanges()
