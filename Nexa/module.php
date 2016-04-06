@@ -1,6 +1,7 @@
 <?
 
 require_once(__DIR__ . "/../TellstickUtil.php");  
+require_once(__DIR__ . "/../Logging.php");
 
 class NexaSensor extends IPSModule
 {
@@ -13,6 +14,7 @@ class NexaSensor extends IPSModule
 		$this->RegisterPropertyInteger ("house", 0 );
 		$this->RegisterPropertyInteger ("unit", 0 );
 		$this->RegisterPropertyInteger ("timeout", 2 );
+		$this->RegisterPropertyBoolean ("log", false );
     }
 
     public function ApplyChanges() {
@@ -27,10 +29,12 @@ class NexaSensor extends IPSModule
 		$data = json_decode($JSONString);
 		$message = utf8_decode($data->Buffer);
 		
-		IPS_LogMessage("Nexa Sensor", "Received ".$message);
+		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		
+		$log->LogMessage("Received ".$message);
 		
 		if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
-			IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported GUID in DataID)");
+			$log->LogMessage("This is not for me! (unsupported GUID in DataID)");
 			return;
 		}
 
@@ -38,9 +42,9 @@ class NexaSensor extends IPSModule
 
 		if(stripos($protocol, "arctech")!==false) {
 			$decodedMessage = DecodeNexa($message);
-			IPS_LogMessage("Nexa Sensor", "Decoded message: ".$decodedMessage);
+			$log->LogMessage("Decoded message: ".$decodedMessage);
 		} else {
-			IPS_LogMessage("Nexa Sensor", "This is not for me! (unsupported protocol: ".$protocol.")");
+			$log->LogMessage("This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
 
@@ -48,12 +52,12 @@ class NexaSensor extends IPSModule
 			$unit = intval(GetParameter("unit", $decodedMessage));
 			$house = intval(GetParameter("house", $decodedMessage));
 				
-			IPS_LogMessage("Nexa Sensor", "Received command from: ".$house.":".$unit);
+			$log->LogMessage("Received command from: ".$house.":".$unit);
 							
 			$myUnit = $this->ReadPropertyInteger("unit");
 			$myHouse = $this->ReadPropertyInteger("house");
 				
-			IPS_LogMessage("Nexa Sensor", "I am:".$myHouse.":".$myUnit);
+			$log->LogMessage("I am:".$myHouse.":".$myUnit);
 				
 			if($myUnit==$unit && $myHouse==$house) {
 				$interval = $this->ReadPropertyInteger("timeout");
@@ -63,7 +67,7 @@ class NexaSensor extends IPSModule
 				$lastProcessed = GetValueInteger($lastId);
 
 				if($lastProcessed+$interval<$now) {
-					IPS_LogMessage("Nexa Sensor", "It is a match, updating status...");
+					$log->LogMessage("It is a match, updating status...");
 
 					$method = GetParameter("method", $decodedMessage);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
@@ -71,7 +75,7 @@ class NexaSensor extends IPSModule
 					SetValueInteger($lastId, $now);
 				}
 			} else {
-				IPS_LogMessage("Nexa Sensor", "This is not me!");
+				$log->LogMessage("This is not me!");
 			}
 		}
 		
