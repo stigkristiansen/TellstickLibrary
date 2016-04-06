@@ -58,10 +58,10 @@ class OregonWeatherStation extends IPSModule
 			$myModelInt = $this->ReadPropertyInteger("model");
 			switch($myModelInt) {
 				case 0:
-					$myModel="0xF824";
+					$myModel="F824";
 					break;
 				case 1:
-					$myModel="0xEA4C";
+					$myModel="EA4C";
 					break;
 				default:
 					$myModel="";
