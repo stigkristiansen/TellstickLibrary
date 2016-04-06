@@ -34,7 +34,7 @@ class OregonWeatherStation extends IPSModule
         IPS_LogMessage("Oregon Sensor", "Received ".$message);
         
         if($data->DataID!="{F746048C-AAB6-479D-AC48-B4C08875E5CF}") {
-        	IPS_LogMessage("OregonSensor", "This is not for me! (unsupported GUID in DataID)");
+        	IPS_LogMessage("Oregon Sensor", "This is not for me! (unsupported GUID in DataID)");
         	return;
         }
 
