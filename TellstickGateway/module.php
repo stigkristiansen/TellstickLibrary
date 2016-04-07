@@ -72,7 +72,8 @@ class TellstickGateway extends IPSModule
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 				
 					$messages[]=$message;
-				}
+				} else
+					$log->LogMessage("Message already sendt. Skipping...");
 				
 				if($i!=$max-2)
 					$data = substr($data, $i+2);
