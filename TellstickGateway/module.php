@@ -63,16 +63,26 @@ class TellstickGateway extends IPSModule
 		$max = sizeof($arr);
 		for($i=0;$i<$max-1;$i++) {
 			if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
+				$foundMessage = true;
+				
 				$message = substr($data, 2, $i-1);
 				$log->LogMessage("Found message: ".$message);
-				if(CheckMessage($messages, $message)) {
-					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+				
+				$exitingMessage = false;
+				$xMax = sizeof($messages); 
+     				for($x=0;$x<$xMax;$x++) { 
+     					if($message==$messages[$x]) {
+     						$exitingMessage = true;
+     						break;
+     					} 
+     				}		     					     	
+				if(!$exitingMessage) {
+					$this->SendDataToChildren(json_enc$de(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 				
 					$messages[]=$message;
 				}
-				$foundMessage = true;
-									
+				
 				if($i!=$max-2)
 					$data = substr($data, $i+2);
 				else
