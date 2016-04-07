@@ -59,7 +59,7 @@ class TellstickGateway extends IPSModule
 				$message = substr($data, 2, $i-1);
 				$log->LogMessage("Found message: ".$message);
 				
-				$exitingMessage = false;
+				$existingMessage = false;
 				$xMax = sizeof($messages); 
      				for($x=0;$x<$xMax;$x++) { 
      					if($message==$messages[$x]) {
@@ -67,7 +67,7 @@ class TellstickGateway extends IPSModule
      						break;
      					} 
      				}		     					     	
-				if(!$exitingMessage) {
+				if(!$existingMessage) {
 					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 					
@@ -88,9 +88,14 @@ class TellstickGateway extends IPSModule
 	} while ($foundMessage && strlen($data)>0);
 	
 	SetValueString($bufferId, $data);
-
+	
 	$this->Unlock("ReceiveLock");
-      
+	
+	if(sizeof($messages)=0)
+		$log->LogMessage("No message found");
+	
+	unset($messages);
+	
 	return true;
     }
     
