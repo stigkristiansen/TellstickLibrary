@@ -47,7 +47,7 @@ class TellstickGateway extends IPSModule
 	$data = GetValueString($bufferId);
 	$data = substr($data, strpos($data, "+W"));
         $data .= $incomingBuffer;
-		
+	$log->LogMessage("Searching for a complete message...");	
 	do {
 		$foundMessage = false;
 		$arr = str_split($data);
@@ -70,8 +70,10 @@ class TellstickGateway extends IPSModule
 				if(!$exitingMessage) {
 					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
-				
+					
 					$messages[]=$message;
+					
+					$log->LogMessage("Message sendt to childeren");
 				} else
 					$log->LogMessage("Message already sendt. Skipping...");
 				
