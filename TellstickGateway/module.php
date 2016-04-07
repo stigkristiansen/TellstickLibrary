@@ -63,7 +63,7 @@ class TellstickGateway extends IPSModule
 				$xMax = sizeof($messages); 
      				for($x=0;$x<$xMax;$x++) { 
      					if($message==$messages[$x]) {
-     						$exitingMessage = true;
+     						$existingMessage = true;
      						break;
      					} 
      				}		     					     	
