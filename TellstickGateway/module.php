@@ -72,7 +72,7 @@ class TellstickGateway extends IPSModule
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 					
 					$messages[]=$message;
-					
+					$log->LogMessage("Recorded message for later search. Number of stored messages:".sizeof($messages));
 					$log->LogMessage("Message sendt to childeren");
 				} else
 					$log->LogMessage("Message already sendt. Skipping...");
