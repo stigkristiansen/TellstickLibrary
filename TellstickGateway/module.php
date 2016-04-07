@@ -91,7 +91,7 @@ class TellstickGateway extends IPSModule
 	
 	$this->Unlock("ReceiveLock");
 	
-	if(sizeof($messages)=0)
+	if(sizeof($messages)==0)
 		$log->LogMessage("No message found");
 	
 	unset($messages);
