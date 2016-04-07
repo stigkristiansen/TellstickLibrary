@@ -39,7 +39,7 @@ class TellstickGateway extends IPSModule
 	$bufferId = $this->GetIDForIdent("Buffer");
 	
         if (!$this->Lock("ReceiveLock")) {
-            $log->LogMessage("Buffer is already locked");
+            $log->LogMessage("Buffer is already locked. Aborting message handling!");
             return false; 
         } else
 	$log->LogMessage("Buffer is locked");
