@@ -26,16 +26,7 @@ class TellstickGateway extends IPSModule
         IPS_SetHidden($this->GetIDForIdent('LastCommand'), true);    
     }
     
-    private function CheckMessage($messages, $message) {
-    	$iMax = sizeof($messages);
-    	for($i=0;$i<$iMax;$i++) {
-    		if($message==$messages[$i])
-    			return false;
-    	}
-    	
-    	return true;
-    }
-    
+
     public function ReceiveData($JSONString) {
 	$messages = array();
 	
@@ -77,7 +68,7 @@ class TellstickGateway extends IPSModule
      					} 
      				}		     					     	
 				if(!$exitingMessage) {
-					$this->SendDataToChildren(json_enc$de(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
 				
 					$messages[]=$message;
