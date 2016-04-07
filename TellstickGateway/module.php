@@ -82,7 +82,7 @@ class TellstickGateway extends IPSModule
     
     private function CheckMessage($messages, $message) {
     	$iMax = len($messages)
-    	for($i=0;$i$<iMax;$i++) {
+    	for($i=0;$i<$iMax;$i++) {
     		if($message==$messages[$i])
     			return false;
     	}
