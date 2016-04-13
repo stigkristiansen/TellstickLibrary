@@ -22,6 +22,9 @@ class Logging {
       IPS_LogMessage($this->sender, $Message);
 	 }
   }
-
+  
+    public function LogMessageError($Message) {
+      IPS_LogMessage($this->sender, $Message);
+    }
 }
 ?>
