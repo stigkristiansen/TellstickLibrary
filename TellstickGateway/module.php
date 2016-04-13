@@ -68,9 +68,15 @@ class TellstickGateway extends IPSModule
      					} 
      				}		     					     	
 				if(!$existingMessage) {
-					$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+					try {
+						$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
+					} catch (Exeption $ex) {
+						$log->LogMessageError("Failed to send message to all childeren. Error: ".$ex->getMessage());
+						$this->Unlock("ReceiveLock");
+						unset($messages);
+						return false;
+					}
 					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
-					
 					$messages[]=$message;
 					$log->LogMessage("Recorded message for later search. Number of stored messages:".sizeof($messages));
 					$log->LogMessage("Message sendt to childeren");
