@@ -85,20 +85,20 @@ function DecodeOregonF824($data) {
 	$arr=str_split($data);
 
 	$crcCheck = $arr[13];
-	$messageChecksum1 = "0x".$arr[12];
-	$messageChecksum2 = "0x".$arr[11];
-	$unknown = "0x".$arr[10];
-	$hum1 = "0x".$arr[9];
-	$hum2 = "0x".$arr[8];
-	$neg = "0x".$arr[7];
+	$messageChecksum1 = HexDec($arr[12]);
+	$messageChecksum2 = HexDec($arr[11]);
+	$unknown = HexDec($arr[10]);
+	$hum1 = HexDec($arr[9]);
+	$hum2 = HexDec($arr[8]);
+	$neg = HexDec($arr[7]);
 //	$neg = $arr[7];
-	$temp1 = "0x".$arr[6];
-	$temp2 = "0x".$arr[5];
-	$temp3 = "0x".$arr[4];
-	$battery = "0x".$arr[3]; //PROBABLY battery
-	$checksum = $arr[1] + $arr[2];
+	$temp1 = HexDec($arr[6]);
+	$temp2 = HexDec($arr[5]);
+	$temp3 = HexDec($arr[4]);
+	$battery = HexDec($arr[3]); //PROBABLY battery
+	$checksum = HexDec($arr[1]) + HexDec($arr[2]);
 	$rollingcode = $checksum;
-	$channel = "0x".$arr[0];
+	$channel = HexDec($arr[0]);
 
 	//IPS_LogMessage("Tellstick 2","Neg: ".$neg);
 
