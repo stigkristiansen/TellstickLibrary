@@ -59,7 +59,7 @@ class ProovePoolThermometer extends IPSModule
 			
 			$myId = $this->ReadPropertyInteger("id");
 			
-			if($myModel=="temperature" && $myId==$id) {
+			if($model=="temperature" && $myId==$id) {
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
 		
