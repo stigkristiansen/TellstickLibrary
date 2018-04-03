@@ -123,5 +123,46 @@ function DecodeOregonF824($data) {
 
 }
 
+function DecodeFineOffset ($Data) {
+	$data = GetParameter("data", $Data);
+	
+	if(strlen($data)<8)
+		return "";
+	
+	// CRC
+	$crc = HexDec(substr($data, strlen($data)-2));
+	
+	$data = substr($data, 0, strlen($data) -2);
+	
+	$humidity = HexDec(substr($data, strlen($data)-2));
+	
+	$data = substr($data, 0, strlen($data) -2);
+	
+	$value = HexDec(substr($data, strlen($data)-3));
+	$temperature = $value/10;
+	
+	$value >>= 11;
+	if($value & 1)
+		$temperaure *= -1;
+		
+	$data = substr($data, 0, strlen($data)-3);
+	
+	$id = HexDec($data) & 0xFF;
+	
+	$decoded = "class:sensor;protocol:fineoffset;id:".$id.";model:";
+	
+	if($humidity<=100)
+		$decoded .= "temperaturehumidity;humidity:".$humidity.";";
+	else if($humidity==255)
+		$decoded .= "temperature;";
+	else
+		return "";
+	
+	$decoded .= "temp:".$temperature.";";
+	
+	return $decoded;
+}
+
+
 
 ?>
