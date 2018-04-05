@@ -81,7 +81,8 @@ class NexaSensor extends IPSModule
 					$log->LogMessage("The Status value was set to ".$method);
 					//SetValueInteger($lastId, $now);
 					$this->SetBuffer("LastProcessed", $now);
-				}
+				} else
+					$log->LogMessage("To many messages in ".$interval." seconds. Skipping the message");
 			} else {
 				$log->LogMessage("This is not me!");
 			}

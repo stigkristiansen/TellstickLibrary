@@ -99,7 +99,7 @@ class OregonWeatherStation extends IPSModule
 					//SetValueInteger($lastId, $now);
 					$this->SetBuffer("LastProcessed", $now);
 				} else
-					$log->LogMessage("To many messages in ".$interval." seconds");
+					$log->LogMessage("To many messages in ".$interval." seconds. Skipping the message");
 			} else 
 				$log->LogMessage("This is not me!"); 
 	

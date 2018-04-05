@@ -78,7 +78,8 @@ class ProovePoolThermometer extends IPSModule
 					
 					$this->SetBuffer("LastProcessed", $now);
 					//SetValueInteger($lastId, $now);
-				}
+				} else
+					$log->LogMessage("To many messages in ".$interval." seconds. Skipping the message");
 			} else 
 				$log->LogMessage("This is not me!"); 
 	
