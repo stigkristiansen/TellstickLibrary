@@ -83,7 +83,7 @@ class OregonWeatherStation extends IPSModule
 		
 				//$lastId = $this->GetIDForIdent("Last");
 				//$lastProcessed = GetValueInteger($lastId);
-
+				$lastProcessed = intval($this->GetBuffer("LastProcessed"));
 				if($lastProcessed+$interval<$now) {
 
 					//$temperature = GetParameter("temp", $decodedMessage);
@@ -96,9 +96,11 @@ class OregonWeatherStation extends IPSModule
 					SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
 					
-					SetValueInteger($lastId, $now);
-				}
-			}  else 
+					//SetValueInteger($lastId, $now);
+					$this->SetBuffer("LastProcessed", $now);
+				} else
+					$log->LogMessage("To many messages in ".$interval." seconds");
+			} else 
 				$log->LogMessage("This is not me!"); 
 	
 		} else {

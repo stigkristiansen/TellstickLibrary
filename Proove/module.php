@@ -67,14 +67,16 @@ class ProovePoolThermometer extends IPSModule
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
 		
-				$lastId = $this->GetIDForIdent("Last");
-				$lastProcessed = GetValueInteger($lastId);
-
+				//$lastId = $this->GetIDForIdent("Last");
+				//$lastProcessed = GetValueInteger($lastId);
+				$lastProcessed = intval($this->GetBuffer("LastProcessed"));
 				if($lastProcessed+$interval<$now) {
 					//$temperature = GetParameter("temp", $decodedMessage);
 					$temperature = GetParameter("temp", $message);
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
-					SetValueInteger($lastId, $now);
+					
+					$this->SetBuffer("LastProcessed", $now);
+					//SetValueInteger($lastId, $now);
 				}
 			} else 
 				$log->LogMessage("This is not me!"); 

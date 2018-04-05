@@ -69,9 +69,9 @@ class NexaSensor extends IPSModule
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
 		
-				$lastId = $this->GetIDForIdent("Last");
-				$lastProcessed = GetValueInteger($lastId);
-
+				//$lastId = $this->GetIDForIdent("Last");
+				//$lastProcessed = GetValueInteger($lastId);
+				$lastProcessed = intval($this->GetBuffer("LastProcessed"));
 				if($lastProcessed+$interval<$now) {
 					$log->LogMessage("It is a match, updating status...");
 
@@ -79,7 +79,8 @@ class NexaSensor extends IPSModule
 					$method = GetParameter("method", $message);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
 					
-					SetValueInteger($lastId, $now);
+					//SetValueInteger($lastId, $now);
+					$this->SetBuffer("LastProcessed", $now);
 				}
 			} else {
 				$log->LogMessage("This is not me!");
