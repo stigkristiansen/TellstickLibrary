@@ -27,7 +27,7 @@ class NexaSensor extends IPSModule
 		$house = $this->ReadPropertyInteger ("house");
 		$unit = $this->ReadPropertyInteger ("unit");
 		
-		$this->SetReceiveDataFilter("protocol:arctech;model:selflearning;house:".$house.";unit:".$unit.";group:\d*;method:*");
+		$this->SetReceiveDataFilter(".*protocol:arctech;model:selflearning;house:".$house.";unit:".$unit.";group:\d*;method:.*");
     }
 	
     public function ReceiveData($JSONString) {
