@@ -26,6 +26,11 @@ class ProovePoolThermometer extends IPSModule
 		//$this->RegisterVariableInteger( "Last", "Last", "", 2 );
 		//IPS_SetHidden($this->GetIDForIdent('Last'), true);
 		
+		//.*;protocol:fineoffset;id:\d*;model:temperature;.*
+		
+		$id = $this->ReadPropertyInteger("id");
+		$this->SetReceiveDataFilter(".*;protocol:fineoffset;id:".$id.";model:temperature;.*");
+		
     }
 	
     public function ReceiveData($JSONString) {
