@@ -26,6 +26,12 @@ class OregonWeatherStation extends IPSModule
         $this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
 		//$this->RegisterVariableInteger( "Last", "Last", "", 2 );
 		//IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		
+		//.*protocol:oregon;model:.*;id:\d*;.*
+		
+		$model = $this->GetModelByNumber($this->ReadPropertyInteger("model"));
+		$id = $this->ReadPropertyInteger("id")
+		$this->SetReceiveDataFilter(".*protocol:oregon;model:".$model.";id:".$id.";.*");
     }
 	
     public function ReceiveData($JSONString) {
@@ -108,6 +114,19 @@ class OregonWeatherStation extends IPSModule
 		}
  
     }
+	
+	private function GetModelByNumber($Number) {
+		switch($Number) {
+				case 0:
+					return "F824";
+					break;
+				case 1:
+					return "EA4C";
+					break;
+				default:
+					return "";
+			}
+	}
 
 }
 
