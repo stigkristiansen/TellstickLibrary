@@ -76,7 +76,7 @@ class TellstickGateway extends IPSModule
 							$decodedMessage = $this->DecodeMessage($message);
 							if(strlen($decodedMessage) > 0) {
 								$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $decodedMessage)));
-								$log->LogMessage("Decoded message sent to children: ".$decodedMessaage);
+								$log->LogMessage("Decoded message sent to children: ".$decodedMessage);
 							} else
 								$log->LogMessage("The protocol in the message is not supported");
 						}catch(Exeption $ex){
