@@ -51,9 +51,13 @@ class NexaSensor extends IPSModule
 
 		//if(strlen($decodedMessage)>0) {
 		if(strlen($message)>0) {
-			$unit = intval(GetParameter("unit", $decodedMessage));
-			$house = intval(GetParameter("house", $decodedMessage));
-				
+			//$unit = intval(GetParameter("unit", $decodedMessage));
+			//$house = intval(GetParameter("house", $decodedMessage));
+			
+			$unit = intval(GetParameter("unit", $message));
+			$house = intval(GetParameter("house", $message));
+			
+			
 			$log->LogMessage("Received command from: ".$house.":".$unit);
 							
 			$myUnit = $this->ReadPropertyInteger("unit");
@@ -71,7 +75,8 @@ class NexaSensor extends IPSModule
 				if($lastProcessed+$interval<$now) {
 					$log->LogMessage("It is a match, updating status...");
 
-					$method = GetParameter("method", $decodedMessage);
+					//$method = GetParameter("method", $decodedMessage);
+					$method = GetParameter("method", $message);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
 					
 					SetValueInteger($lastId, $now);

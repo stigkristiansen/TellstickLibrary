@@ -53,9 +53,11 @@ class ProovePoolThermometer extends IPSModule
 	
 		//if(strlen($decodedMessage)>0) {
 		if(strlen($message)>0) {
-			$model = GetParameter("model", $decodedMessage);
+			//$model = GetParameter("model", $decodedMessage);
+			//$id = intval(GetParameter("id", $decodedMessage));
 			
-			$id = intval(GetParameter("id", $decodedMessage));
+			$model = GetParameter("model", $message);
+			$id = intval(GetParameter("id", $message));
 			
 			$log->LogMessage("Received command from: ".$model.":".$id);
 			
@@ -69,7 +71,8 @@ class ProovePoolThermometer extends IPSModule
 				$lastProcessed = GetValueInteger($lastId);
 
 				if($lastProcessed+$interval<$now) {
-					$temperature = GetParameter("temp", $decodedMessage);
+					//$temperature = GetParameter("temp", $decodedMessage);
+					$temperature = GetParameter("temp", $message);
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
 					SetValueInteger($lastId, $now);
 				}

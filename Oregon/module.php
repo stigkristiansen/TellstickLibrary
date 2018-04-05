@@ -55,9 +55,11 @@ class OregonWeatherStation extends IPSModule
 	
 		// if(strlen($decodedMessage)>0) { 
 		if(strlen($message)>0) {
-			$model = GetParameter("model", $decodedMessage);
+			//$model = GetParameter("model", $decodedMessage);
+			//$id = intval(GetParameter("id", $decodedMessage));
 			
-			$id = intval(GetParameter("id", $decodedMessage));
+			$model = GetParameter("model", $message);
+			$id = intval(GetParameter("id", $message));
 			
 			$log->LogMessage("Received command from: ".$model.":".$id);
 			
@@ -84,8 +86,12 @@ class OregonWeatherStation extends IPSModule
 
 				if($lastProcessed+$interval<$now) {
 
-					$temperature = GetParameter("temp", $decodedMessage);
-					$humidity = GetParameter("humidity", $decodedMessage);
+					//$temperature = GetParameter("temp", $decodedMessage);
+					//$humidity = GetParameter("humidity", $decodedMessage);
+					
+					$temperature = GetParameter("temp", $message);
+					$humidity = GetParameter("humidity", $message);
+			
 			
 					SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
