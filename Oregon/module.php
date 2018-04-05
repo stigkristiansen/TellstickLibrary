@@ -24,8 +24,8 @@ class OregonWeatherStation extends IPSModule
         
         $this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
         $this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
-		$this->RegisterVariableInteger( "Last", "Last", "", 2 );
-		IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		//$this->RegisterVariableInteger( "Last", "Last", "", 2 );
+		//IPS_SetHidden($this->GetIDForIdent('Last'), true);
     }
 	
     public function ReceiveData($JSONString) {
@@ -45,14 +45,16 @@ class OregonWeatherStation extends IPSModule
         $protocol = GetParameter("protocol", $message);
 
 		if(stripos($protocol, "oregon")!==false) {
-			$decodedMessage = DecodeOregon($message);
-			$log->LogMessage("Decoded message: ".$decodedMessage);
+			//$decodedMessage = DecodeOregon($message);
+			//$log->LogMessage("Decoded message: ".$decodedMessage);
+			$log->LogMessage("Analyzing the message and updating values...");
 		} else {
 			$log->LogMessage("This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
 	
-		if(strlen($decodedMessage)>0) {
+		// if(strlen($decodedMessage)>0) { 
+		if(strlen($message)>0) {
 			$model = GetParameter("model", $decodedMessage);
 			
 			$id = intval(GetParameter("id", $decodedMessage));
@@ -77,8 +79,8 @@ class OregonWeatherStation extends IPSModule
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
 		
-				$lastId = $this->GetIDForIdent("Last");
-				$lastProcessed = GetValueInteger($lastId);
+				//$lastId = $this->GetIDForIdent("Last");
+				//$lastProcessed = GetValueInteger($lastId);
 
 				if($lastProcessed+$interval<$now) {
 

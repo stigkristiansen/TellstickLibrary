@@ -41,14 +41,16 @@ class NexaSensor extends IPSModule
 		$protocol = GetParameter("protocol", $message);
 
 		if(stripos($protocol, "arctech")!==false) {
-			$decodedMessage = DecodeNexa($message);
-			$log->LogMessage("Decoded message: ".$decodedMessage);
+			//$decodedMessage = DecodeNexa($message);
+			//$log->LogMessage("Decoded message: ".$decodedMessage);
+			$log->LogMessage("Analyzing the message and updating values...");
 		} else {
 			$log->LogMessage("This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
 
-		if(strlen($decodedMessage)>0) {
+		//if(strlen($decodedMessage)>0) {
+		if(strlen($message)>0) {
 			$unit = intval(GetParameter("unit", $decodedMessage));
 			$house = intval(GetParameter("house", $decodedMessage));
 				

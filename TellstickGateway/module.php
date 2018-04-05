@@ -1,6 +1,7 @@
 <?
 
-require_once(__DIR__ . "/../Logging.php");
+require_once(__DIR__ . "/../libs/Logging.php");
+require_once(__DIR__ . "/../libs/TellstickUtil.php");
 
 class TellstickGateway extends IPSModule
 {
@@ -19,113 +20,136 @@ class TellstickGateway extends IPSModule
     {
         parent::ApplyChanges();
     
-		$this->RegisterVariableString("Buffer", "Buffer");	
-		$this->RegisterVariableString("LastCommand", "LastCommand");
+		//$this->RegisterVariableString("Buffer", "Buffer");	
+		//$this->RegisterVariableString("LastCommand", "LastCommand");
 
-		IPS_SetHidden($this->GetIDForIdent('Buffer'), true);
-        IPS_SetHidden($this->GetIDForIdent('LastCommand'), true);    
+		//IPS_SetHidden($this->GetIDForIdent('Buffer'), true);
+        //IPS_SetHidden($this->GetIDForIdent('LastCommand'), true);    
     }
     
 
     public function ReceiveData($JSONString) {
-	$messages = array();
-	
-        $incomingData = json_decode($JSONString);
-	$incomingBuffer = utf8_decode($incomingData->Buffer);
+		$messages = array();
 		
-	$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
-	$log->LogMessage("Incoming from serial: ".$incomingBuffer);
+		$incomingData = json_decode($JSONString);
+		$incomingBuffer = utf8_decode($incomingData->Buffer);
+			
+		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
+		$log->LogMessage("Incoming from serial: ".$incomingBuffer);
+			
+		//$bufferId = $this->GetIDForIdent("Buffer");
 		
-	$bufferId = $this->GetIDForIdent("Buffer");
-	
-        if (!$this->Lock("ReceiveLock")) {
-            $log->LogMessage("Buffer is already locked. Aborting message handling!");
-            return false; 
-        } else
-	$log->LogMessage("Buffer is locked");
+		if (!$this->Lock("ReceiveLock")) {
+			$log->LogMessage("Buffer is already locked. Aborting message handling!");
+			return false; 
+		} else
+			$log->LogMessage("Buffer is locked");
 
-	$data = GetValueString($bufferId);
-	$data = substr($data, strpos($data, "+W"));
-        $data .= $incomingBuffer;
-	$log->LogMessage("Searching for a complete message...");	
-	do {
-		$foundMessage = false;
-		$arr = str_split($data);
-		$max = sizeof($arr);
-		for($i=0;$i<$max-1;$i++) {
-			if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
-				$foundMessage = true;
-				
-				$message = substr($data, 2, $i-1);
-				$log->LogMessage("Found message: ".$message);
-				
-				$existingMessage = false;
-				$xMax = sizeof($messages); 
-     				for($x=0;$x<$xMax;$x++) { 
-     					if($message==$messages[$x]) {
-     						$existingMessage = true;
-     						break;
-     					} 
-     				}		     					     	
-				if(!$existingMessage) {
-					try {
-						$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $message)));
-					} catch (Exeption $ex) {
-						$log->LogMessageError("Failed to send message to all childeren. Error: ".$ex->getMessage());
-						$this->Unlock("ReceiveLock");
-						unset($messages);
-						return false;
-					}
-					SetValueString($this->GetIDForIdent("LastCommand"), $message);	
-					$messages[]=$message;
-					$log->LogMessage("Recorded message for later search. Number of stored messages:".sizeof($messages));
-					$log->LogMessage("Message sendt to childeren");
-				} else
-					$log->LogMessage("Message already sendt. Skipping...");
-				
-				if($i!=$max-2)
-					$data = substr($data, $i+2);
-				else
-					$data = "";
-				   
-				break;
+		$data = $this->GetBuffer("SerialBuffer");
+		//$data = GetValueString($bufferId);
+		$data = substr($data, strpos($data, "+W"));
+		$data .= $incomingBuffer;
+		
+		$log->LogMessage("Searching for a complete message...");	
+		do{
+			$foundMessage = false;
+			$arr = str_split($data);
+			$max = sizeof($arr);
+			for($i=0;$i<$max-1;$i++) {
+				if(ord($arr[$i])==0x0D && ord($arr[$i+1])==0x0A) {
+					$foundMessage = true;
+					
+					$message = substr($data, 2, $i-1);
+					$log->LogMessage("Found message: ".$message);
+					
+					$existingMessage = false;
+					$xMax = sizeof($messages); 
+					for($x=0;$x<$xMax;$x++) { 
+						if($message==$messages[$x]) {
+							$existingMessage = true;
+							break;
+						} 
+					}		     					     	
+					
+					if(!$existingMessage){
+						try{
+							$decodedMessage = $this->DecodeMessage($message);
+							if(strlen($decodedMessage) > 0) {
+								$this->SendDataToChildren(json_encode(Array("DataID" => "{F746048C-AAB6-479D-AC48-B4C08875E5CF}", "Buffer" => $decodedMessage)));
+								$log->LogMessage("Message sent to children");
+							} else
+								$log->LogMessage("The protocol in the message is not supported");
+						}catch(Exeption $ex){
+							$log->LogMessageError("Failed to send message to all children. Error: ".$ex->getMessage());
+							$this->Unlock("ReceiveLock");
+							unset($messages);
+							return false;
+						}
+						//SetValueString($this->GetIDForIdent("LastCommand"), $message);	
+						$messages[]=$message;
+						$log->LogMessage("Recorded message for later search. Number of stored messages:".sizeof($messages));
+					} else
+						$log->LogMessage("Message already sent. Skipping...");
+					
+					if($i!=$max-2)
+						$data = substr($data, $i+2);
+					else
+						$data = "";
+					   
+					break;
+				}
 			}
-		}
-	} while ($foundMessage && strlen($data)>0);
-	
-	SetValueString($bufferId, $data);
-	
-	$this->Unlock("ReceiveLock");
-	
-	if(sizeof($messages)==0)
-		$log->LogMessage("No message found");
-	
-	unset($messages);
-	
-	return true;
+		} while($foundMessage && strlen($data)>0);
+		
+		$this->SetBuffer("SerialBuffer", $data);
+		//SetValueString($bufferId, $data);
+		
+		$this->Unlock("ReceiveLock");
+		
+		if(sizeof($messages)==0)
+			$log->LogMessage("No message found");
+		
+		unset($messages);
+		
+		return true;
     }
-    
-
-    private function Lock($ident)   {
-        for ($i = 0; $i < 100; $i++)
-        {
-            if (IPS_SemaphoreEnter("TSG_" . (string) $this->InstanceID . (string) $ident, 1))
-            {
+	
+	private function DecodeMessage($message) {
+		$protocol = GetParameter($message);
+		
+		decodedMessage = "";
+		
+		switch(strtolower($protocol)) {
+			case "fineoffset":
+				$decodedMessage = DecodeFineOffset($message);
+				break;
+			case "oregon":
+				$decodedMessage = DecodeOregon($message);
+				break;
+			case "arctech":
+				$decodedMessage = DecodeNexa($message);
+				break;
+		}
+		
+		return $decodedMessage;
+		
+	}
+ 
+    private function Lock($ident){
+        for ($i = 0; $i < 100; $i++){
+            if (IPS_SemaphoreEnter("TSG_".(string)$this->InstanceID.(string)$ident, 1)){
                 return true;
-            }
-            else
-            {
+            } else {
                 $log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
-		$log->LogMessage("Waiting for lock");
+				$log->LogMessage("Waiting for lock");
 				IPS_Sleep(mt_rand(1, 5));
             }
         }
         return false;
     }
 
-    private function Unlock($ident)
-    {
-        IPS_SemaphoreLeave("TSG_" . (string) $this->InstanceID . (string) $ident);
+    private function Unlock($ident){
+        IPS_SemaphoreLeave("TSG_".(string)$this->InstanceID.(string)$ident);
 		$log = new Logging($this->ReadPropertyBoolean("log"), IPS_Getname($this->InstanceID));
 		$log->LogMessage("Buffer is unlocked");
     }

@@ -43,14 +43,16 @@ class ProovePoolThermometer extends IPSModule
         $protocol = GetParameter("protocol", $message);
 
 		if(stripos($protocol, "fineoffset")!==false) {
-			$decodedMessage = DecodeFineOffset($message);
-			$log->LogMessage("Decoded message: ".$decodedMessage);
+			//$decodedMessage = DecodeFineOffset($message);
+			//$log->LogMessage("Decoded message: ".$decodedMessage);
+			$log->LogMessage("Analyzing the message and updating values...");
 		} else {
 			$log->LogMessage("This is not for me! (unsupported protocol: ".$protocol.")");
 			return;
 		}
 	
-		if(strlen($decodedMessage)>0) {
+		//if(strlen($decodedMessage)>0) {
+		if(strlen($message)>0) {
 			$model = GetParameter("model", $decodedMessage);
 			
 			$id = intval(GetParameter("id", $decodedMessage));
@@ -71,7 +73,7 @@ class ProovePoolThermometer extends IPSModule
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
 					SetValueInteger($lastId, $now);
 				}
-			}  else 
+			} else 
 				$log->LogMessage("This is not me!"); 
 	
 		} else {
