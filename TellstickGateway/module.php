@@ -115,7 +115,7 @@ class TellstickGateway extends IPSModule
     }
 	
 	private function DecodeMessage($message) {
-		$protocol = GetParameter($message);
+		$protocol = GetParameter("protocol", $message);
 		
 		$decodedMessage = "";
 		
