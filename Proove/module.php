@@ -74,6 +74,7 @@ class ProovePoolThermometer extends IPSModule
 					//$temperature = GetParameter("temp", $decodedMessage);
 					$temperature = GetParameter("temp", $message);
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
+					$log->LogMessage("The temperature value was set to ".$temperature);
 					
 					$this->SetBuffer("LastProcessed", $now);
 					//SetValueInteger($lastId, $now);

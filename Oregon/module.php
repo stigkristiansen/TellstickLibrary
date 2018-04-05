@@ -95,7 +95,7 @@ class OregonWeatherStation extends IPSModule
 			
 					SetValueInteger($this->GetIDForIdent("Humidity"), $humidity); 
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
-					
+					$log->LogMessage("The temperature and humidity values was set to ".$temperature." and ".$humidity);
 					//SetValueInteger($lastId, $now);
 					$this->SetBuffer("LastProcessed", $now);
 				} else

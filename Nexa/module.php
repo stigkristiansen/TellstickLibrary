@@ -78,7 +78,7 @@ class NexaSensor extends IPSModule
 					//$method = GetParameter("method", $decodedMessage);
 					$method = GetParameter("method", $message);
 					SetValueBoolean($this->GetIDForIdent("Status"), ($method=='turnon'?true:false)); 
-					
+					$log->LogMessage("The Status value was set to ".$method);
 					//SetValueInteger($lastId, $now);
 					$this->SetBuffer("LastProcessed", $now);
 				}
