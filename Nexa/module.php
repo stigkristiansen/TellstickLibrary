@@ -21,8 +21,13 @@ class NexaSensor extends IPSModule
         parent::ApplyChanges();
         
         $this->RegisterVariableBoolean( "Status", "Status", "", false );
-		$this->RegisterVariableInteger( "Last", "Last", "", 2 );
-		IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		//$this->RegisterVariableInteger( "Last", "Last", "", 2 );
+		//IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		
+		$house = $this->ReadPropertyInteger ("house");
+		$unit = $this->ReadPropertyInteger ("unit");
+		
+		$this->SetReceiveDataFilter("protocol:arctech;model:selflearning;house:".$house.";unit:".$unit.";group:\d*;method:*");
     }
 	
     public function ReceiveData($JSONString) {
@@ -82,7 +87,7 @@ class NexaSensor extends IPSModule
 					//SetValueInteger($lastId, $now);
 					$this->SetBuffer("LastProcessed", $now);
 				} else
-					$log->LogMessage("To many messages in ".$interval." seconds. Skipping the message");
+					$log->LogMessage("To many messages in the last ".$interval." seconds. Skipping the message");
 			} else {
 				$log->LogMessage("This is not me!");
 			}

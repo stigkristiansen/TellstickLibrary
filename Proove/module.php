@@ -23,8 +23,9 @@ class ProovePoolThermometer extends IPSModule
         parent::ApplyChanges();
 
         $this->RegisterVariableFloat( "Temperature", "Temperature", "~Temperature", 0 );
-		$this->RegisterVariableInteger( "Last", "Last", "", 2 );
-		IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		//$this->RegisterVariableInteger( "Last", "Last", "", 2 );
+		//IPS_SetHidden($this->GetIDForIdent('Last'), true);
+		
     }
 	
     public function ReceiveData($JSONString) {
@@ -79,7 +80,7 @@ class ProovePoolThermometer extends IPSModule
 					$this->SetBuffer("LastProcessed", $now);
 					//SetValueInteger($lastId, $now);
 				} else
-					$log->LogMessage("To many messages in ".$interval." seconds. Skipping the message");
+					$log->LogMessage("To many messages in the last ".$interval." seconds. Skipping the message");
 			} else 
 				$log->LogMessage("This is not me!"); 
 	
