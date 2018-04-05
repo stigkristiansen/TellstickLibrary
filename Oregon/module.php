@@ -30,7 +30,7 @@ class OregonWeatherStation extends IPSModule
 		//.*protocol:oregon;model:.*;id:\d*;.*
 		
 		$model = $this->GetModelByNumber($this->ReadPropertyInteger("model"));
-		$id = $this->ReadPropertyInteger("id")
+		$id = $this->ReadPropertyInteger("id");
 		$this->SetReceiveDataFilter(".*protocol:oregon;model:".$model.";id:".$id.";.*");
     }
 	
