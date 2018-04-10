@@ -1,5 +1,6 @@
 { 
     "id" :  "{E1DBE6EF-7A5A-4DB9-8099-0F0E214076A1}" , 
+    "name" :  "Proove thermometer hygrometer" , 
     "type" :  3 , 
     "vendor" :  "Telldus" , 
     "aliases" : 
