@@ -1,11 +1,10 @@
 { 
     "id" :  "{E1DBE6EF-7A5A-4DB9-8099-0F0E214076A1}" , 
-    "name" :  "Proove Pool thermometer" , 
     "type" :  3 , 
     "vendor" :  "Telldus" , 
     "aliases" : 
     [ 
-        "Proove Pool Thermometer"  
+        "Proove Thermometer/Hygrometer"  
     ] ,   
     "parentRequirements" :  ["{14494CA1-CFD9-4189-A804-900BFB7A71AB}"] , 
     "childRequirements" :  [] , 

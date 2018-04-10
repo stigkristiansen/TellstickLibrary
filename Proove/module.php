@@ -3,7 +3,7 @@
 require_once(__DIR__ . "/../TellstickUtil.php");  
 require_once(__DIR__ . "/../Logging.php");
 
-class ProovePoolThermometer extends IPSModule
+class ProoveThermometerHygrometer extends IPSModule
 {
 
     
@@ -29,7 +29,7 @@ class ProovePoolThermometer extends IPSModule
 		//.*;protocol:fineoffset;id:\d*;model:temperature;.*
 		
 		$id = $this->ReadPropertyInteger("id");
-		$this->SetReceiveDataFilter(".*;protocol:fineoffset;id:".$id.";model:temperature;.*");
+		$this->SetReceiveDataFilter(".*;protocol:fineoffset;id:".$id.";model:temperature.*;.*");
 		
     }
 	
@@ -69,21 +69,28 @@ class ProovePoolThermometer extends IPSModule
 			
 			$myId = $this->ReadPropertyInteger("id");
 			
-			if($model=="temperature" && $myId==$id) {
+			if($myId==$id) {
 				$interval = $this->ReadPropertyInteger("timeout");
 				$now = time();
-		
-				//$lastId = $this->GetIDForIdent("Last");
-				//$lastProcessed = GetValueInteger($lastId);
+						
 				$lastProcessed = intval($this->GetBuffer("LastProcessed"));
 				if($lastProcessed+$interval<$now) {
-					//$temperature = GetParameter("temp", $decodedMessage);
+					
 					$temperature = GetParameter("temp", $message);
 					SetValueFloat($this->GetIDForIdent("Temperature"), $temperature);
 					$log->LogMessage("The temperature value was set to ".$temperature);
 					
+					if($model=="temperaturehumidity") {
+						$humidity = GetParameter("humidity", $decodedMessage);
+						$humidityId = $this->GetIDForIdent("Humidity");
+						if($humidityId==false)
+							$humidityId= $this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
+						
+						SetValueInteger($humidityId, $humidity);
+					}
+					
 					$this->SetBuffer("LastProcessed", $now);
-					//SetValueInteger($lastId, $now);
+					
 				} else
 					$log->LogMessage("To many messages in the last ".$interval." seconds. Skipping the message");
 			} else 
