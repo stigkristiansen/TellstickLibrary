@@ -81,7 +81,7 @@ class ProoveThermometerHygrometer extends IPSModule
 					$log->LogMessage("The temperature value was set to ".$temperature);
 					
 					if($model=="temperaturehumidity") {
-						$humidity = GetParameter("humidity", $decodedMessage);
+						$humidity = GetParameter("humidity", $message);
 						$humidityId = $this->GetIDForIdent("Humidity");
 						if($humidityId==false)
 							$humidityId= $this->RegisterVariableInteger( "Humidity", "Humidity", "~Humidity", 1 );
