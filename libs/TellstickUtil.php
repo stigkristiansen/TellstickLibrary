@@ -23,7 +23,7 @@ function GetParameter($Parameter, $Message) {
 function DecodeNexa($Message){
 
 	$model = GetParameter("model", $Message);
-  	$data = GetParameter("data", $Message) + 0;
+  	$data = HexDec(GetParameter("data", $Message));
 
 	if(stripos($model, "selflearning")!==false)
 	   return DecodeNexaSelflearning($data);
