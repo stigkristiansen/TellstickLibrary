@@ -5,7 +5,7 @@
 	{ "type": "Select", "name": "model", "caption": "Model",
             "options": [
                 { "label": "F824", "value": 0 },
-                { "label": "EA4C", "value": 1 },
+                { "label": "EA4C", "value": 1 }
             ]
 	},
 	{ "type": "IntervalBox", "name": "timeout", "caption": "seconds" },
