@@ -1,7 +1,6 @@
 {
     "elements":
     [
-  	{ "type": "CheckBox", "name": "log", "caption": "Enable logging" }
-    ],
-
+  	    { "type": "CheckBox", "name": "log", "caption": "Enable logging" }
+    ]
 }
