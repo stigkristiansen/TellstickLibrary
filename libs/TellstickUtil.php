@@ -143,7 +143,7 @@ function DecodeFineOffset ($Data) {
 	
 	$value >>= 11;
 	if($value & 1)
-		$temperaure *= -1;
+		$temperature *= -1;
 		
 	$data = substr($data, 0, strlen($data)-3);
 	
