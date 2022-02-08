@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once(__DIR__ . "/../libs/TellstickUtil.php");  
 require_once(__DIR__ . "/../libs/Logging.php");
@@ -130,4 +130,4 @@ class OregonWeatherStation extends IPSModule
 
 }
 
-?>
+
