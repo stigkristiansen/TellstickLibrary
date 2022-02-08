@@ -1,4 +1,4 @@
-<?
+<?php
 
 function GetParameter($Parameter, $Message) {
 	$arr = explode (";", $Message);
@@ -165,4 +165,4 @@ function DecodeFineOffset ($Data) {
 
 
 
-?>
+
