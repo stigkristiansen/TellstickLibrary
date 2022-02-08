@@ -1,4 +1,4 @@
-<?
+<?php
 
 require_once(__DIR__ . "/../libs/Logging.php");
 require_once(__DIR__ . "/../libs/TellstickUtil.php");
@@ -155,4 +155,4 @@ class TellstickGateway extends IPSModule
     }
 }
 
-?>
+
